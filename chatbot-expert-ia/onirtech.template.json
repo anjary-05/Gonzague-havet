@@ -1,0 +1,2475 @@
+{
+  "schemaVersion": 1,
+  "kind": "template",
+  "id": "chatbot-expert-ia",
+  "name": "Expert IA — Gonzague Havet",
+  "description": "Chatbot shadcn : page et widget, identité, discussion, médias et pièces jointes.",
+  "version": "1.3.25",
+  "publisher": {
+    "id": "onirtech",
+    "name": "ONIRTECH",
+    "trustLevel": "official"
+  },
+  "compatibility": {
+    "hostProtocol": "onirtech.template-host.v1"
+  },
+  "ui": {
+    "mode": "web-component",
+    "entry": "./dist/index.js",
+    "element": "onirtech-template-chatbot-expert-ia",
+    "shadowDom": "open",
+    "widget": {
+      "entry": "./dist/index.js",
+      "element": "onirtech-template-chatbot-expert-ia-widget",
+      "integrity": "sha256-qN1KE7u9P1ZS8WnASv3zu8iTc07n45L8gxxRB4h5fCw=",
+      "display": {
+        "defaultPosition": "bottom-right",
+        "allowedPositions": [
+          "bottom-right",
+          "bottom-left",
+          "top-right",
+          "top-left"
+        ],
+        "closedSize": {
+          "width": 64,
+          "height": 64
+        },
+        "openSize": {
+          "width": 480,
+          "height": 640
+        },
+        "maxSize": {
+          "width": 480,
+          "height": 640
+        }
+      }
+    },
+    "integrity": "sha256-qN1KE7u9P1ZS8WnASv3zu8iTc07n45L8gxxRB4h5fCw="
+  },
+  "capabilities": [
+    "messages",
+    "media",
+    "theme",
+    "modelForm",
+    "attachments",
+    "userState",
+    "knowledge",
+    "fallback",
+    "data"
+  ],
+  "network": [],
+  "params": [
+    {
+      "key": "titre_chat",
+      "label": "Titre du chat",
+      "description": "Nom affiché dans l'en-tête du widget",
+      "default": "Gonzague Havet (IA)",
+      "type": "string",
+      "maxLength": 80
+    },
+    {
+      "key": "initiales",
+      "label": "Initiales",
+      "description": "Texte de l'avatar (2 lettres recommandées)",
+      "default": "GH",
+      "type": "string",
+      "maxLength": 8
+    },
+    {
+      "key": "avatar_forme",
+      "label": "Forme de l'avatar",
+      "description": "Forme du badge avatar (rond, carré, arrondi)",
+      "default": "rond",
+      "type": "select",
+      "options": [
+        {
+          "value": "rond",
+          "label": "Rond"
+        },
+        {
+          "value": "carre",
+          "label": "Carré"
+        },
+        {
+          "value": "arrondi",
+          "label": "Arrondi"
+        }
+      ]
+    },
+    {
+      "key": "badge",
+      "label": "Badge",
+      "description": "Petit badge à côté du titre",
+      "default": "IA DIRECTE",
+      "type": "string",
+      "maxLength": 24
+    },
+    {
+      "key": "statut",
+      "label": "Statut",
+      "description": "Ligne de disponibilité sous le titre",
+      "default": "Disponible · France · Maroc · Madagascar",
+      "type": "string",
+      "maxLength": 120
+    },
+    {
+      "key": "message_accueil",
+      "label": "Message d'accueil",
+      "description": "Premier message affiché quand l'hôte ne fournit pas encore de messages",
+      "default": "Bonjour ! Je suis l’assistant conversationnel IA de Gonzague Havet. Je réponds à vos questions sur ses expertises, ses territoires d’intervention (France, Maroc, Madagascar) ou pour préparer un échange direct avec lui.",
+      "type": "text",
+      "maxLength": 600
+    },
+    {
+      "key": "libelle_whatsapp",
+      "label": "Libellé WhatsApp",
+      "description": "Texte du lien WhatsApp dans la barre de contact",
+      "default": "WhatsApp Direct",
+      "type": "string",
+      "maxLength": 40
+    },
+    {
+      "key": "url_whatsapp",
+      "label": "URL WhatsApp",
+      "description": "Lien http(s) ouvert depuis le widget",
+      "default": "https://wa.me/33632161919",
+      "type": "url"
+    },
+    {
+      "key": "telephone",
+      "label": "Téléphone",
+      "description": "Numéro affiché et composé via tel:",
+      "default": "+33 3 21 63 19 19",
+      "type": "string",
+      "maxLength": 40
+    },
+    {
+      "key": "libelle_rdv",
+      "label": "Libellé rendez-vous",
+      "description": "Durée affichée dans la barre de contact",
+      "default": "30 min",
+      "type": "string",
+      "maxLength": 24
+    },
+    {
+      "key": "libelle_rdv_bulle",
+      "label": "Bouton réserver",
+      "description": "Libellé du bouton dans le message d'accueil",
+      "default": "Réserver 30 min",
+      "type": "string",
+      "maxLength": 40
+    },
+    {
+      "key": "libelle_whatsapp_bulle",
+      "label": "Bouton WhatsApp",
+      "description": "Libellé du second bouton dans le message d'accueil",
+      "default": "WhatsApp direct",
+      "type": "string",
+      "maxLength": 40
+    },
+    {
+      "key": "url_rdv",
+      "label": "URL rendez-vous",
+      "description": "Lien http(s) de réservation",
+      "default": "https://cal.com/gonzague-havet/30min",
+      "type": "url"
+    },
+    {
+      "key": "placeholder",
+      "label": "Placeholder",
+      "description": "Texte indicatif du champ de message",
+      "default": "Posez votre question à Gonzague (IA)…",
+      "type": "string",
+      "maxLength": 120
+    },
+    {
+      "key": "libelle_identite",
+      "label": "Titre identité",
+      "description": "Titre du formulaire d'identification",
+      "default": "Avant de commencer",
+      "type": "string",
+      "maxLength": 80
+    },
+    {
+      "key": "libelle_demarrer",
+      "label": "Bouton démarrer",
+      "description": "Libellé du bouton du formulaire d'identification",
+      "default": "Démarrer la discussion",
+      "type": "string",
+      "maxLength": 60
+    },
+    {
+      "key": "libelle_terminer",
+      "label": "Bouton terminer",
+      "description": "Libellé du bouton qui clôt la discussion",
+      "default": "Terminer la discussion",
+      "type": "string",
+      "maxLength": 60
+    },
+    {
+      "key": "texte_finalise",
+      "label": "Texte finalisé",
+      "description": "Affiché quand la discussion est clôturée",
+      "default": "Discussion finalisée",
+      "type": "string",
+      "maxLength": 80
+    },
+    {
+      "key": "couleur_primaire",
+      "label": "Couleur primaire",
+      "description": "Bulle utilisateur et bouton d'envoi",
+      "default": "#4f46e5",
+      "type": "color"
+    },
+    {
+      "key": "couleur_fond",
+      "label": "Couleur de fond",
+      "description": "Fond du widget",
+      "default": "#f7f7fa",
+      "type": "color"
+    },
+    {
+      "key": "couleur_page",
+      "label": "Couleur de page",
+      "description": "Fond de la surface page",
+      "default": "#f7f7fa",
+      "type": "color"
+    },
+    {
+      "key": "couleur_accent",
+      "label": "Couleur d'accent",
+      "description": "Barre de navigation et survols",
+      "default": "#eef2ff",
+      "type": "color"
+    },
+    {
+      "key": "couleur_bordure",
+      "label": "Couleur de bordure",
+      "description": "Bordures des cartes et champs",
+      "default": "#e3e4ea",
+      "type": "color"
+    },
+    {
+      "key": "mode_theme",
+      "label": "Mode thème",
+      "description": "Suit le système, ou force clair / sombre",
+      "default": "auto",
+      "type": "select",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Automatique"
+        },
+        {
+          "value": "light",
+          "label": "Clair"
+        },
+        {
+          "value": "dark",
+          "label": "Sombre"
+        }
+      ]
+    },
+    {
+      "key": "largeur_widget",
+      "label": "Largeur du widget",
+      "description": "Largeur en pixels sur la surface page",
+      "default": 480,
+      "type": "number",
+      "min": 280,
+      "max": 720
+    },
+    {
+      "key": "hauteur_widget",
+      "label": "Hauteur du widget",
+      "description": "Hauteur en pixels sur la surface page",
+      "default": 640,
+      "type": "number",
+      "min": 320,
+      "max": 1200
+    },
+    {
+      "key": "afficher_nav",
+      "label": "Afficher les contacts",
+      "description": "Barre WhatsApp / téléphone / rendez-vous",
+      "default": true,
+      "type": "boolean"
+    },
+    {
+      "key": "afficher_sujets",
+      "label": "Afficher les sujets",
+      "description": "Puces de suggestions sous la discussion",
+      "default": true,
+      "type": "boolean"
+    },
+    {
+      "key": "afficher_piece_jointe",
+      "label": "Afficher la pièce jointe",
+      "description": "Bouton d'ajout de fichier dans la saisie",
+      "default": true,
+      "type": "boolean"
+    },
+    {
+      "key": "afficher_micro",
+      "label": "Afficher le micro",
+      "description": "Bouton d'ajout de message vocal",
+      "default": true,
+      "type": "boolean"
+    },
+    {
+      "key": "afficher_galerie",
+      "label": "Afficher la galerie",
+      "description": "Barre des photos et liens actifs (resources.media)",
+      "default": false,
+      "type": "boolean"
+    },
+    {
+      "key": "afficher_avatar",
+      "label": "Afficher l'avatar",
+      "description": "Avatar dans l'en-tête et les messages",
+      "default": true,
+      "type": "boolean"
+    },
+    {
+      "key": "afficher_badge",
+      "label": "Afficher le badge",
+      "description": "Badge « IA DIRECTE » dans l'en-tête",
+      "default": true,
+      "type": "boolean"
+    },
+    {
+      "key": "afficher_statut",
+      "label": "Afficher le statut",
+      "description": "Ligne de disponibilité dans l'en-tête",
+      "default": true,
+      "type": "boolean"
+    },
+    {
+      "key": "afficher_horodatage",
+      "label": "Afficher l'horodatage",
+      "description": "Ligne « À l'instant » sous les messages",
+      "default": true,
+      "type": "boolean"
+    },
+    {
+      "key": "afficher_boutons_accueil",
+      "label": "Afficher les boutons d'accueil",
+      "description": "Boutons Réserver / WhatsApp du 1er message",
+      "default": true,
+      "type": "boolean"
+    },
+    {
+      "key": "afficher_frappe",
+      "label": "Afficher l'indicateur de frappe",
+      "description": "Points animés pendant state.typing",
+      "default": true,
+      "type": "boolean"
+    },
+    {
+      "key": "afficher_sources",
+      "label": "Afficher les sources",
+      "description": "Références de connaissances sous un message",
+      "default": true,
+      "type": "boolean"
+    },
+    {
+      "key": "afficher_fin",
+      "label": "Afficher le bouton terminer",
+      "description": "Bouton discret d'appel à actions.finish()",
+      "default": true,
+      "type": "boolean"
+    },
+    {
+      "key": "afficher_icones",
+      "label": "Afficher les icônes",
+      "description": "Affiche/masque toutes les icônes SVG",
+      "default": true,
+      "type": "boolean"
+    },
+    {
+      "key": "style_icones",
+      "label": "Style des icônes",
+      "description": "Traits (shadcn) ou pleines",
+      "default": "traits",
+      "type": "select",
+      "options": [
+        {
+          "value": "traits",
+          "label": "Traits"
+        },
+        {
+          "value": "pleins",
+          "label": "Pleines"
+        }
+      ]
+    },
+    {
+      "key": "protocole_cle",
+      "label": "Clé du protocole",
+      "description": "Clé du message portant l'instruction structurée",
+      "default": "interface_instruction",
+      "type": "string",
+      "maxLength": 60
+    },
+    {
+      "key": "mode_par_defaut",
+      "label": "Mode par défaut",
+      "description": "Mode sélectionné en l'absence d'instruction",
+      "default": "conversation",
+      "type": "select",
+      "options": [
+        {
+          "value": "conversation",
+          "label": "Conversation"
+        },
+        {
+          "value": "visuel",
+          "label": "Visuel"
+        },
+        {
+          "value": "media",
+          "label": "Média"
+        },
+        {
+          "value": "application",
+          "label": "Application"
+        },
+        {
+          "value": "donnees",
+          "label": "Données"
+        },
+        {
+          "value": "exploration",
+          "label": "Exploration"
+        },
+        {
+          "value": "voix",
+          "label": "Voix"
+        }
+      ]
+    },
+    {
+      "key": "afficher_indicateur_mode",
+      "label": "Afficher le mode",
+      "description": "Pastille du mode actif dans l'en-tête",
+      "default": false,
+      "type": "boolean"
+    },
+    {
+      "key": "afficher_cartes_instruction",
+      "label": "Afficher les cartes d'interface",
+      "description": "Composants générés par les instructions structurées",
+      "default": true,
+      "type": "boolean"
+    },
+    {
+      "key": "limite_lignes_tableau",
+      "label": "Limite du tableau",
+      "description": "Nombre maximum de lignes affichées",
+      "default": 5,
+      "type": "number",
+      "min": 1,
+      "max": 20
+    },
+    {
+      "key": "avatar_image",
+      "label": "Avatar (image)",
+      "description": "Image de l'avatar importée (PNG, JPEG, WebP) ; vide = initiales",
+      "type": "image",
+      "default": ""
+    },
+    {
+      "key": "sujets_suggeres",
+      "label": "Sujets suggérés",
+      "description": "Puces cliquables envoyées comme premier message",
+      "type": "array",
+      "default": [
+        "Parcours & Vision",
+        "Accompagnement PME / ETI",
+        "Territoires d’intervention"
+      ],
+      "minItems": 0,
+      "maxItems": 8,
+      "items": {
+        "type": "string",
+        "default": "",
+        "maxLength": 80
+      }
+    },
+    {
+      "key": "modes_actifs",
+      "label": "Modes actifs",
+      "description": "Modes d'interfaces activés pour cette expérience",
+      "type": "array",
+      "default": [
+        "conversation",
+        "visuel",
+        "media",
+        "application",
+        "donnees",
+        "exploration"
+      ],
+      "minItems": 0,
+      "maxItems": 8,
+      "items": {
+        "type": "string",
+        "default": "conversation",
+        "enum": [
+          "conversation",
+          "visuel",
+          "media",
+          "application",
+          "donnees",
+          "exploration",
+          "voix"
+        ],
+        "maxLength": 20
+      }
+    },
+    {
+      "key": "libelles_interface",
+      "label": "libelles interface",
+      "type": "object",
+      "default": {
+        "conversation": "Conversation",
+        "visuel": "Visuel",
+        "media": "Média",
+        "application": "Application",
+        "donnees": "Données",
+        "exploration": "Exploration",
+        "voix": "Voix",
+        "confirmer": "Confirmer",
+        "annuler": "Annuler",
+        "non_disponible": "Ressource non disponible dans cette interface",
+        "ouvrir": "Ouvrir"
+      },
+      "properties": [
+        {
+          "key": "conversation",
+          "label": "conversation",
+          "type": "string",
+          "default": "Conversation"
+        },
+        {
+          "key": "visuel",
+          "label": "visuel",
+          "type": "string",
+          "default": "Visuel"
+        },
+        {
+          "key": "media",
+          "label": "media",
+          "type": "string",
+          "default": "Média"
+        },
+        {
+          "key": "application",
+          "label": "application",
+          "type": "string",
+          "default": "Application"
+        },
+        {
+          "key": "donnees",
+          "label": "donnees",
+          "type": "string",
+          "default": "Données"
+        },
+        {
+          "key": "exploration",
+          "label": "exploration",
+          "type": "string",
+          "default": "Exploration"
+        },
+        {
+          "key": "voix",
+          "label": "voix",
+          "type": "string",
+          "default": "Voix"
+        },
+        {
+          "key": "confirmer",
+          "label": "confirmer",
+          "type": "string",
+          "default": "Confirmer"
+        },
+        {
+          "key": "annuler",
+          "label": "annuler",
+          "type": "string",
+          "default": "Annuler"
+        },
+        {
+          "key": "non_disponible",
+          "label": "non disponible",
+          "type": "string",
+          "default": "Ressource non disponible dans cette interface"
+        },
+        {
+          "key": "ouvrir",
+          "label": "ouvrir",
+          "type": "string",
+          "default": "Ouvrir"
+        }
+      ]
+    },
+    {
+      "key": "apparence",
+      "label": "Apparence avancée",
+      "description": "Tokens visuels de chaque zone (couleurs, tailles, rayons, ombres)",
+      "type": "object",
+      "default": {
+        "page": {
+          "fond": "#f7f7fa",
+          "marge_verticale": 24,
+          "marge_laterale": 12
+        },
+        "widget": {
+          "fond": "#f7f7fa",
+          "bordure": "#e3e4ea",
+          "largeur_bordure": 1,
+          "rayon": 16,
+          "ombre": "0 24px 60px rgba(30, 27, 58, 0.28)"
+        },
+        "header": {
+          "debut": "#1e1b4b",
+          "fin": "#f7f7fa",
+          "texte": "#ffffff",
+          "texte_statut": "rgba(255, 255, 255, 0.72)",
+          "taille_titre": 17,
+          "taille_statut": 13,
+          "point_couleur": "#22c55e",
+          "point_taille": 10,
+          "fond_badge": "rgba(255, 255, 255, 0.15)",
+          "bordure_badge": "rgba(255, 255, 255, 0.25)",
+          "texte_badge": "#ffffff",
+          "taille_badge": 11,
+          "rayon_badge": 7
+        },
+        "avatar": {
+          "taille": 56,
+          "taille_message": 36,
+          "fond": "#e0e7ff",
+          "texte": "#3730a3",
+          "taille_texte": 18,
+          "taille_texte_message": 12,
+          "bordure_largeur": 2,
+          "bordure_couleur": "#ffffff",
+          "ombre_active": true
+        },
+        "nav": {
+          "fond": "#eef2ff",
+          "opacite": 0.75,
+          "texte": "#0b0b12",
+          "taille_texte": 13.5,
+          "espacement": 8,
+          "marge_laterale": 16,
+          "couleur_whatsapp": "#34d399",
+          "rayon_lien": 6
+        },
+        "message": {
+          "fond": "#ffffff",
+          "texte": "#0b0b12",
+          "fond_utilisateur": "#4f46e5",
+          "texte_utilisateur": "#ffffff",
+          "rayon": 18,
+          "marge_interne": 16,
+          "largeur_max": 85,
+          "taille_texte": 15,
+          "interligne": 1.6,
+          "espacement": 16,
+          "ombre": "0 1px 3px rgba(30, 27, 58, 0.1)",
+          "heure_couleur": "#6f7080",
+          "heure_taille": 12
+        },
+        "bouton": {
+          "fond": "#e0e7ff",
+          "texte": "#3730a3",
+          "bordure": "#e3e4ea",
+          "rayon": 9,
+          "hauteur": 36,
+          "taille_texte": 14
+        },
+        "suggestions": {
+          "fond": "#f1f1f4",
+          "opacite": 0.7,
+          "texte": "#6f7080",
+          "fond_puce": "#ffffff",
+          "texte_puce": "#6f7080",
+          "bordure_puce": "#e3e4ea",
+          "rayon_puce": 999,
+          "hauteur_puce": 44,
+          "taille_puce": 15
+        },
+        "saisie": {
+          "fond": "#f7f7fa",
+          "fond_champ": "#ffffff",
+          "texte": "#0b0b12",
+          "placeholder": "#6f7080",
+          "bordure": "#e3e4ea",
+          "rayon_champ": 14,
+          "hauteur_champ": 48,
+          "taille_texte": 15,
+          "couleur_icone": "#6f7080",
+          "fond_envoi": "#4f46e5",
+          "texte_envoi": "#ffffff",
+          "rayon_envoi": 14,
+          "taille_envoi": 48,
+          "opacite_desactive": 0.55
+        },
+        "pj": {
+          "fond": "#ffffff",
+          "bordure": "#e3e4ea",
+          "texte": "#0b0b12",
+          "rayon": 12,
+          "taille_image": 36,
+          "couleur_supprimer": "#6f7080"
+        },
+        "frappe": {
+          "couleur": "#6f7080",
+          "taille_point": 6,
+          "vitesse": 1
+        },
+        "identite": {
+          "taille_avatar": 64,
+          "fond_avatar": "#e0e7ff",
+          "texte_avatar": "#3730a3",
+          "taille_titre": 18,
+          "texte_description": "#6f7080",
+          "fond_champ": "#ffffff",
+          "bordure_champ": "#e3e4ea",
+          "rayon_champ": 12,
+          "hauteur_champ": 46,
+          "fond_bouton": "#4f46e5",
+          "texte_bouton": "#ffffff",
+          "rayon_bouton": 14,
+          "hauteur_bouton": 48,
+          "accent_case": "#4f46e5"
+        },
+        "galerie": {
+          "fond": "#f7f7fa",
+          "bordure": "#e3e4ea",
+          "taille_miniature": 52,
+          "rayon_miniature": 10
+        },
+        "fin": {
+          "couleur": "#6f7080",
+          "taille_texte": 13,
+          "taille_icone": 14
+        },
+        "lanceur": {
+          "fond": "#4f46e5",
+          "texte": "#ffffff",
+          "taille": 60,
+          "ombre": "0 0 0 4px rgba(99, 102, 241, 0.2), 0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+        },
+        "sources": {
+          "couleur": "#6f7080",
+          "taille_texte": 12
+        },
+        "agent": {
+          "fond_carte": "#ffffff",
+          "bordure_carte": "#e3e4ea",
+          "rayon_carte": 14,
+          "texte_carte": "#0b0b12",
+          "fond_mode": "#e6e3f8",
+          "texte_mode": "#3730a3",
+          "rayon_mode": 999,
+          "taille_mode": 11,
+          "fond_confirm": "rgba(30, 27, 58, 0.35)",
+          "fond_dialogue": "#ffffff",
+          "texte_dialogue": "#0b0b12",
+          "fond_table": "#f7f7fa",
+          "bordure_table": "#e3e4ea",
+          "taille_table": 12,
+          "fond_entete_table": "#e6e3f8"
+        },
+        "sombre": {
+          "page": "#0b0b12",
+          "widget": "#0b0b12",
+          "header_debut": "#1e1b4b",
+          "header_fin": "#0b0b12",
+          "header_texte": "#f4f4f5",
+          "nav_fond": "#312e81",
+          "nav_texte": "#f4f4f5",
+          "message_fond": "#18181b",
+          "message_texte": "#f4f4f5",
+          "message_utilisateur_fond": "#4f46e5",
+          "bouton_fond": "#27272a",
+          "bouton_texte": "#f4f4f5",
+          "saisie_fond": "#0b0b12",
+          "champ_fond": "#18181b",
+          "bordure": "#312e81",
+          "avatar_fond": "#27272a",
+          "avatar_texte": "#f4f4f5",
+          "texte_attenue": "#a1a1aa"
+        }
+      },
+      "properties": [
+        {
+          "key": "page",
+          "label": "page",
+          "type": "object",
+          "default": {
+            "fond": "#f7f7fa",
+            "marge_verticale": 24,
+            "marge_laterale": 12
+          },
+          "properties": [
+            {
+              "key": "fond",
+              "label": "fond",
+              "type": "color",
+              "default": "#f7f7fa"
+            },
+            {
+              "key": "marge_verticale",
+              "label": "marge verticale",
+              "type": "number",
+              "default": 24
+            },
+            {
+              "key": "marge_laterale",
+              "label": "marge laterale",
+              "type": "number",
+              "default": 12
+            }
+          ]
+        },
+        {
+          "key": "widget",
+          "label": "widget",
+          "type": "object",
+          "default": {
+            "fond": "#f7f7fa",
+            "bordure": "#e3e4ea",
+            "largeur_bordure": 1,
+            "rayon": 16,
+            "ombre": "0 24px 60px rgba(30, 27, 58, 0.28)"
+          },
+          "properties": [
+            {
+              "key": "fond",
+              "label": "fond",
+              "type": "color",
+              "default": "#f7f7fa"
+            },
+            {
+              "key": "bordure",
+              "label": "bordure",
+              "type": "color",
+              "default": "#e3e4ea"
+            },
+            {
+              "key": "largeur_bordure",
+              "label": "largeur bordure",
+              "type": "number",
+              "default": 1
+            },
+            {
+              "key": "rayon",
+              "label": "rayon",
+              "type": "number",
+              "default": 16
+            },
+            {
+              "key": "ombre",
+              "label": "ombre",
+              "type": "string",
+              "default": "0 24px 60px rgba(30, 27, 58, 0.28)"
+            }
+          ]
+        },
+        {
+          "key": "header",
+          "label": "header",
+          "type": "object",
+          "default": {
+            "debut": "#1e1b4b",
+            "fin": "#f7f7fa",
+            "texte": "#ffffff",
+            "texte_statut": "rgba(255, 255, 255, 0.72)",
+            "taille_titre": 17,
+            "taille_statut": 13,
+            "point_couleur": "#22c55e",
+            "point_taille": 10,
+            "fond_badge": "rgba(255, 255, 255, 0.15)",
+            "bordure_badge": "rgba(255, 255, 255, 0.25)",
+            "texte_badge": "#ffffff",
+            "taille_badge": 11,
+            "rayon_badge": 7
+          },
+          "properties": [
+            {
+              "key": "debut",
+              "label": "debut",
+              "type": "color",
+              "default": "#1e1b4b"
+            },
+            {
+              "key": "fin",
+              "label": "fin",
+              "type": "color",
+              "default": "#f7f7fa"
+            },
+            {
+              "key": "texte",
+              "label": "texte",
+              "type": "color",
+              "default": "#ffffff"
+            },
+            {
+              "key": "texte_statut",
+              "label": "texte statut",
+              "type": "string",
+              "default": "rgba(255, 255, 255, 0.72)"
+            },
+            {
+              "key": "taille_titre",
+              "label": "taille titre",
+              "type": "number",
+              "default": 17
+            },
+            {
+              "key": "taille_statut",
+              "label": "taille statut",
+              "type": "number",
+              "default": 13
+            },
+            {
+              "key": "point_couleur",
+              "label": "point couleur",
+              "type": "color",
+              "default": "#22c55e"
+            },
+            {
+              "key": "point_taille",
+              "label": "point taille",
+              "type": "number",
+              "default": 10
+            },
+            {
+              "key": "fond_badge",
+              "label": "fond badge",
+              "type": "string",
+              "default": "rgba(255, 255, 255, 0.15)"
+            },
+            {
+              "key": "bordure_badge",
+              "label": "bordure badge",
+              "type": "string",
+              "default": "rgba(255, 255, 255, 0.25)"
+            },
+            {
+              "key": "texte_badge",
+              "label": "texte badge",
+              "type": "color",
+              "default": "#ffffff"
+            },
+            {
+              "key": "taille_badge",
+              "label": "taille badge",
+              "type": "number",
+              "default": 11
+            },
+            {
+              "key": "rayon_badge",
+              "label": "rayon badge",
+              "type": "number",
+              "default": 7
+            }
+          ]
+        },
+        {
+          "key": "avatar",
+          "label": "avatar",
+          "type": "object",
+          "default": {
+            "taille": 56,
+            "taille_message": 36,
+            "fond": "#e0e7ff",
+            "texte": "#3730a3",
+            "taille_texte": 18,
+            "taille_texte_message": 12,
+            "bordure_largeur": 2,
+            "bordure_couleur": "#ffffff",
+            "ombre_active": true
+          },
+          "properties": [
+            {
+              "key": "taille",
+              "label": "taille",
+              "type": "number",
+              "default": 56
+            },
+            {
+              "key": "taille_message",
+              "label": "taille message",
+              "type": "number",
+              "default": 36
+            },
+            {
+              "key": "fond",
+              "label": "fond",
+              "type": "color",
+              "default": "#e0e7ff"
+            },
+            {
+              "key": "texte",
+              "label": "texte",
+              "type": "color",
+              "default": "#3730a3"
+            },
+            {
+              "key": "taille_texte",
+              "label": "taille texte",
+              "type": "number",
+              "default": 18
+            },
+            {
+              "key": "taille_texte_message",
+              "label": "taille texte message",
+              "type": "number",
+              "default": 12
+            },
+            {
+              "key": "bordure_largeur",
+              "label": "bordure largeur",
+              "type": "number",
+              "default": 2
+            },
+            {
+              "key": "bordure_couleur",
+              "label": "bordure couleur",
+              "type": "color",
+              "default": "#ffffff"
+            },
+            {
+              "key": "ombre_active",
+              "label": "ombre active",
+              "type": "boolean",
+              "default": true
+            }
+          ]
+        },
+        {
+          "key": "nav",
+          "label": "nav",
+          "type": "object",
+          "default": {
+            "fond": "#eef2ff",
+            "opacite": 0.75,
+            "texte": "#0b0b12",
+            "taille_texte": 13.5,
+            "espacement": 8,
+            "marge_laterale": 16,
+            "couleur_whatsapp": "#34d399",
+            "rayon_lien": 6
+          },
+          "properties": [
+            {
+              "key": "fond",
+              "label": "fond",
+              "type": "color",
+              "default": "#eef2ff"
+            },
+            {
+              "key": "opacite",
+              "label": "opacite",
+              "type": "number",
+              "default": 0.75
+            },
+            {
+              "key": "texte",
+              "label": "texte",
+              "type": "color",
+              "default": "#0b0b12"
+            },
+            {
+              "key": "taille_texte",
+              "label": "taille texte",
+              "type": "number",
+              "default": 13.5
+            },
+            {
+              "key": "espacement",
+              "label": "espacement",
+              "type": "number",
+              "default": 8
+            },
+            {
+              "key": "marge_laterale",
+              "label": "marge laterale",
+              "type": "number",
+              "default": 16
+            },
+            {
+              "key": "couleur_whatsapp",
+              "label": "couleur whatsapp",
+              "type": "color",
+              "default": "#34d399"
+            },
+            {
+              "key": "rayon_lien",
+              "label": "rayon lien",
+              "type": "number",
+              "default": 6
+            }
+          ]
+        },
+        {
+          "key": "message",
+          "label": "message",
+          "type": "object",
+          "default": {
+            "fond": "#ffffff",
+            "texte": "#0b0b12",
+            "fond_utilisateur": "#4f46e5",
+            "texte_utilisateur": "#ffffff",
+            "rayon": 18,
+            "marge_interne": 16,
+            "largeur_max": 85,
+            "taille_texte": 15,
+            "interligne": 1.6,
+            "espacement": 16,
+            "ombre": "0 1px 3px rgba(30, 27, 58, 0.1)",
+            "heure_couleur": "#6f7080",
+            "heure_taille": 12
+          },
+          "properties": [
+            {
+              "key": "fond",
+              "label": "fond",
+              "type": "color",
+              "default": "#ffffff"
+            },
+            {
+              "key": "texte",
+              "label": "texte",
+              "type": "color",
+              "default": "#0b0b12"
+            },
+            {
+              "key": "fond_utilisateur",
+              "label": "fond utilisateur",
+              "type": "color",
+              "default": "#4f46e5"
+            },
+            {
+              "key": "texte_utilisateur",
+              "label": "texte utilisateur",
+              "type": "color",
+              "default": "#ffffff"
+            },
+            {
+              "key": "rayon",
+              "label": "rayon",
+              "type": "number",
+              "default": 18
+            },
+            {
+              "key": "marge_interne",
+              "label": "marge interne",
+              "type": "number",
+              "default": 16
+            },
+            {
+              "key": "largeur_max",
+              "label": "largeur max",
+              "type": "number",
+              "default": 85
+            },
+            {
+              "key": "taille_texte",
+              "label": "taille texte",
+              "type": "number",
+              "default": 15
+            },
+            {
+              "key": "interligne",
+              "label": "interligne",
+              "type": "number",
+              "default": 1.6
+            },
+            {
+              "key": "espacement",
+              "label": "espacement",
+              "type": "number",
+              "default": 16
+            },
+            {
+              "key": "ombre",
+              "label": "ombre",
+              "type": "string",
+              "default": "0 1px 3px rgba(30, 27, 58, 0.1)"
+            },
+            {
+              "key": "heure_couleur",
+              "label": "heure couleur",
+              "type": "color",
+              "default": "#6f7080"
+            },
+            {
+              "key": "heure_taille",
+              "label": "heure taille",
+              "type": "number",
+              "default": 12
+            }
+          ]
+        },
+        {
+          "key": "bouton",
+          "label": "bouton",
+          "type": "object",
+          "default": {
+            "fond": "#e0e7ff",
+            "texte": "#3730a3",
+            "bordure": "#e3e4ea",
+            "rayon": 9,
+            "hauteur": 36,
+            "taille_texte": 14
+          },
+          "properties": [
+            {
+              "key": "fond",
+              "label": "fond",
+              "type": "color",
+              "default": "#e0e7ff"
+            },
+            {
+              "key": "texte",
+              "label": "texte",
+              "type": "color",
+              "default": "#3730a3"
+            },
+            {
+              "key": "bordure",
+              "label": "bordure",
+              "type": "color",
+              "default": "#e3e4ea"
+            },
+            {
+              "key": "rayon",
+              "label": "rayon",
+              "type": "number",
+              "default": 9
+            },
+            {
+              "key": "hauteur",
+              "label": "hauteur",
+              "type": "number",
+              "default": 36
+            },
+            {
+              "key": "taille_texte",
+              "label": "taille texte",
+              "type": "number",
+              "default": 14
+            }
+          ]
+        },
+        {
+          "key": "suggestions",
+          "label": "suggestions",
+          "type": "object",
+          "default": {
+            "fond": "#f1f1f4",
+            "opacite": 0.7,
+            "texte": "#6f7080",
+            "fond_puce": "#ffffff",
+            "texte_puce": "#6f7080",
+            "bordure_puce": "#e3e4ea",
+            "rayon_puce": 999,
+            "hauteur_puce": 44,
+            "taille_puce": 15
+          },
+          "properties": [
+            {
+              "key": "fond",
+              "label": "fond",
+              "type": "color",
+              "default": "#f1f1f4"
+            },
+            {
+              "key": "opacite",
+              "label": "opacite",
+              "type": "number",
+              "default": 0.7
+            },
+            {
+              "key": "texte",
+              "label": "texte",
+              "type": "color",
+              "default": "#6f7080"
+            },
+            {
+              "key": "fond_puce",
+              "label": "fond puce",
+              "type": "color",
+              "default": "#ffffff"
+            },
+            {
+              "key": "texte_puce",
+              "label": "texte puce",
+              "type": "color",
+              "default": "#6f7080"
+            },
+            {
+              "key": "bordure_puce",
+              "label": "bordure puce",
+              "type": "color",
+              "default": "#e3e4ea"
+            },
+            {
+              "key": "rayon_puce",
+              "label": "rayon puce",
+              "type": "number",
+              "default": 999
+            },
+            {
+              "key": "hauteur_puce",
+              "label": "hauteur puce",
+              "type": "number",
+              "default": 44
+            },
+            {
+              "key": "taille_puce",
+              "label": "taille puce",
+              "type": "number",
+              "default": 15
+            }
+          ]
+        },
+        {
+          "key": "saisie",
+          "label": "saisie",
+          "type": "object",
+          "default": {
+            "fond": "#f7f7fa",
+            "fond_champ": "#ffffff",
+            "texte": "#0b0b12",
+            "placeholder": "#6f7080",
+            "bordure": "#e3e4ea",
+            "rayon_champ": 14,
+            "hauteur_champ": 48,
+            "taille_texte": 15,
+            "couleur_icone": "#6f7080",
+            "fond_envoi": "#4f46e5",
+            "texte_envoi": "#ffffff",
+            "rayon_envoi": 14,
+            "taille_envoi": 48,
+            "opacite_desactive": 0.55
+          },
+          "properties": [
+            {
+              "key": "fond",
+              "label": "fond",
+              "type": "color",
+              "default": "#f7f7fa"
+            },
+            {
+              "key": "fond_champ",
+              "label": "fond champ",
+              "type": "color",
+              "default": "#ffffff"
+            },
+            {
+              "key": "texte",
+              "label": "texte",
+              "type": "color",
+              "default": "#0b0b12"
+            },
+            {
+              "key": "placeholder",
+              "label": "placeholder",
+              "type": "color",
+              "default": "#6f7080"
+            },
+            {
+              "key": "bordure",
+              "label": "bordure",
+              "type": "color",
+              "default": "#e3e4ea"
+            },
+            {
+              "key": "rayon_champ",
+              "label": "rayon champ",
+              "type": "number",
+              "default": 14
+            },
+            {
+              "key": "hauteur_champ",
+              "label": "hauteur champ",
+              "type": "number",
+              "default": 48
+            },
+            {
+              "key": "taille_texte",
+              "label": "taille texte",
+              "type": "number",
+              "default": 15
+            },
+            {
+              "key": "couleur_icone",
+              "label": "couleur icone",
+              "type": "color",
+              "default": "#6f7080"
+            },
+            {
+              "key": "fond_envoi",
+              "label": "fond envoi",
+              "type": "color",
+              "default": "#4f46e5"
+            },
+            {
+              "key": "texte_envoi",
+              "label": "texte envoi",
+              "type": "color",
+              "default": "#ffffff"
+            },
+            {
+              "key": "rayon_envoi",
+              "label": "rayon envoi",
+              "type": "number",
+              "default": 14
+            },
+            {
+              "key": "taille_envoi",
+              "label": "taille envoi",
+              "type": "number",
+              "default": 48
+            },
+            {
+              "key": "opacite_desactive",
+              "label": "opacite desactive",
+              "type": "number",
+              "default": 0.55
+            }
+          ]
+        },
+        {
+          "key": "pj",
+          "label": "pj",
+          "type": "object",
+          "default": {
+            "fond": "#ffffff",
+            "bordure": "#e3e4ea",
+            "texte": "#0b0b12",
+            "rayon": 12,
+            "taille_image": 36,
+            "couleur_supprimer": "#6f7080"
+          },
+          "properties": [
+            {
+              "key": "fond",
+              "label": "fond",
+              "type": "color",
+              "default": "#ffffff"
+            },
+            {
+              "key": "bordure",
+              "label": "bordure",
+              "type": "color",
+              "default": "#e3e4ea"
+            },
+            {
+              "key": "texte",
+              "label": "texte",
+              "type": "color",
+              "default": "#0b0b12"
+            },
+            {
+              "key": "rayon",
+              "label": "rayon",
+              "type": "number",
+              "default": 12
+            },
+            {
+              "key": "taille_image",
+              "label": "taille image",
+              "type": "number",
+              "default": 36
+            },
+            {
+              "key": "couleur_supprimer",
+              "label": "couleur supprimer",
+              "type": "color",
+              "default": "#6f7080"
+            }
+          ]
+        },
+        {
+          "key": "frappe",
+          "label": "frappe",
+          "type": "object",
+          "default": {
+            "couleur": "#6f7080",
+            "taille_point": 6,
+            "vitesse": 1
+          },
+          "properties": [
+            {
+              "key": "couleur",
+              "label": "couleur",
+              "type": "color",
+              "default": "#6f7080"
+            },
+            {
+              "key": "taille_point",
+              "label": "taille point",
+              "type": "number",
+              "default": 6
+            },
+            {
+              "key": "vitesse",
+              "label": "vitesse",
+              "type": "number",
+              "default": 1
+            }
+          ]
+        },
+        {
+          "key": "identite",
+          "label": "identite",
+          "type": "object",
+          "default": {
+            "taille_avatar": 64,
+            "fond_avatar": "#e0e7ff",
+            "texte_avatar": "#3730a3",
+            "taille_titre": 18,
+            "texte_description": "#6f7080",
+            "fond_champ": "#ffffff",
+            "bordure_champ": "#e3e4ea",
+            "rayon_champ": 12,
+            "hauteur_champ": 46,
+            "fond_bouton": "#4f46e5",
+            "texte_bouton": "#ffffff",
+            "rayon_bouton": 14,
+            "hauteur_bouton": 48,
+            "accent_case": "#4f46e5"
+          },
+          "properties": [
+            {
+              "key": "taille_avatar",
+              "label": "taille avatar",
+              "type": "number",
+              "default": 64
+            },
+            {
+              "key": "fond_avatar",
+              "label": "fond avatar",
+              "type": "color",
+              "default": "#e0e7ff"
+            },
+            {
+              "key": "texte_avatar",
+              "label": "texte avatar",
+              "type": "color",
+              "default": "#3730a3"
+            },
+            {
+              "key": "taille_titre",
+              "label": "taille titre",
+              "type": "number",
+              "default": 18
+            },
+            {
+              "key": "texte_description",
+              "label": "texte description",
+              "type": "color",
+              "default": "#6f7080"
+            },
+            {
+              "key": "fond_champ",
+              "label": "fond champ",
+              "type": "color",
+              "default": "#ffffff"
+            },
+            {
+              "key": "bordure_champ",
+              "label": "bordure champ",
+              "type": "color",
+              "default": "#e3e4ea"
+            },
+            {
+              "key": "rayon_champ",
+              "label": "rayon champ",
+              "type": "number",
+              "default": 12
+            },
+            {
+              "key": "hauteur_champ",
+              "label": "hauteur champ",
+              "type": "number",
+              "default": 46
+            },
+            {
+              "key": "fond_bouton",
+              "label": "fond bouton",
+              "type": "color",
+              "default": "#4f46e5"
+            },
+            {
+              "key": "texte_bouton",
+              "label": "texte bouton",
+              "type": "color",
+              "default": "#ffffff"
+            },
+            {
+              "key": "rayon_bouton",
+              "label": "rayon bouton",
+              "type": "number",
+              "default": 14
+            },
+            {
+              "key": "hauteur_bouton",
+              "label": "hauteur bouton",
+              "type": "number",
+              "default": 48
+            },
+            {
+              "key": "accent_case",
+              "label": "accent case",
+              "type": "color",
+              "default": "#4f46e5"
+            }
+          ]
+        },
+        {
+          "key": "galerie",
+          "label": "galerie",
+          "type": "object",
+          "default": {
+            "fond": "#f7f7fa",
+            "bordure": "#e3e4ea",
+            "taille_miniature": 52,
+            "rayon_miniature": 10
+          },
+          "properties": [
+            {
+              "key": "fond",
+              "label": "fond",
+              "type": "color",
+              "default": "#f7f7fa"
+            },
+            {
+              "key": "bordure",
+              "label": "bordure",
+              "type": "color",
+              "default": "#e3e4ea"
+            },
+            {
+              "key": "taille_miniature",
+              "label": "taille miniature",
+              "type": "number",
+              "default": 52
+            },
+            {
+              "key": "rayon_miniature",
+              "label": "rayon miniature",
+              "type": "number",
+              "default": 10
+            }
+          ]
+        },
+        {
+          "key": "fin",
+          "label": "fin",
+          "type": "object",
+          "default": {
+            "couleur": "#6f7080",
+            "taille_texte": 13,
+            "taille_icone": 14
+          },
+          "properties": [
+            {
+              "key": "couleur",
+              "label": "couleur",
+              "type": "color",
+              "default": "#6f7080"
+            },
+            {
+              "key": "taille_texte",
+              "label": "taille texte",
+              "type": "number",
+              "default": 13
+            },
+            {
+              "key": "taille_icone",
+              "label": "taille icone",
+              "type": "number",
+              "default": 14
+            }
+          ]
+        },
+        {
+          "key": "lanceur",
+          "label": "lanceur",
+          "type": "object",
+          "default": {
+            "fond": "#4f46e5",
+            "texte": "#ffffff",
+            "taille": 60,
+            "ombre": "0 0 0 4px rgba(99, 102, 241, 0.2), 0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+          },
+          "properties": [
+            {
+              "key": "fond",
+              "label": "fond",
+              "type": "color",
+              "default": "#4f46e5"
+            },
+            {
+              "key": "texte",
+              "label": "texte",
+              "type": "color",
+              "default": "#ffffff"
+            },
+            {
+              "key": "taille",
+              "label": "taille",
+              "type": "number",
+              "default": 60
+            },
+            {
+              "key": "ombre",
+              "label": "ombre",
+              "type": "string",
+              "default": "0 0 0 4px rgba(99, 102, 241, 0.2), 0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+            }
+          ]
+        },
+        {
+          "key": "sources",
+          "label": "sources",
+          "type": "object",
+          "default": {
+            "couleur": "#6f7080",
+            "taille_texte": 12
+          },
+          "properties": [
+            {
+              "key": "couleur",
+              "label": "couleur",
+              "type": "color",
+              "default": "#6f7080"
+            },
+            {
+              "key": "taille_texte",
+              "label": "taille texte",
+              "type": "number",
+              "default": 12
+            }
+          ]
+        },
+        {
+          "key": "agent",
+          "label": "agent",
+          "type": "object",
+          "default": {
+            "fond_carte": "#ffffff",
+            "bordure_carte": "#e3e4ea",
+            "rayon_carte": 14,
+            "texte_carte": "#0b0b12",
+            "fond_mode": "#e6e3f8",
+            "texte_mode": "#3730a3",
+            "rayon_mode": 999,
+            "taille_mode": 11,
+            "fond_confirm": "rgba(30, 27, 58, 0.35)",
+            "fond_dialogue": "#ffffff",
+            "texte_dialogue": "#0b0b12",
+            "fond_table": "#f7f7fa",
+            "bordure_table": "#e3e4ea",
+            "taille_table": 12,
+            "fond_entete_table": "#e6e3f8"
+          },
+          "properties": [
+            {
+              "key": "fond_carte",
+              "label": "fond carte",
+              "type": "color",
+              "default": "#ffffff"
+            },
+            {
+              "key": "bordure_carte",
+              "label": "bordure carte",
+              "type": "color",
+              "default": "#e3e4ea"
+            },
+            {
+              "key": "rayon_carte",
+              "label": "rayon carte",
+              "type": "number",
+              "default": 14
+            },
+            {
+              "key": "texte_carte",
+              "label": "texte carte",
+              "type": "color",
+              "default": "#0b0b12"
+            },
+            {
+              "key": "fond_mode",
+              "label": "fond mode",
+              "type": "color",
+              "default": "#e6e3f8"
+            },
+            {
+              "key": "texte_mode",
+              "label": "texte mode",
+              "type": "color",
+              "default": "#3730a3"
+            },
+            {
+              "key": "rayon_mode",
+              "label": "rayon mode",
+              "type": "number",
+              "default": 999
+            },
+            {
+              "key": "taille_mode",
+              "label": "taille mode",
+              "type": "number",
+              "default": 11
+            },
+            {
+              "key": "fond_confirm",
+              "label": "fond confirm",
+              "type": "string",
+              "default": "rgba(30, 27, 58, 0.35)"
+            },
+            {
+              "key": "fond_dialogue",
+              "label": "fond dialogue",
+              "type": "color",
+              "default": "#ffffff"
+            },
+            {
+              "key": "texte_dialogue",
+              "label": "texte dialogue",
+              "type": "color",
+              "default": "#0b0b12"
+            },
+            {
+              "key": "fond_table",
+              "label": "fond table",
+              "type": "color",
+              "default": "#f7f7fa"
+            },
+            {
+              "key": "bordure_table",
+              "label": "bordure table",
+              "type": "color",
+              "default": "#e3e4ea"
+            },
+            {
+              "key": "taille_table",
+              "label": "taille table",
+              "type": "number",
+              "default": 12
+            },
+            {
+              "key": "fond_entete_table",
+              "label": "fond entete table",
+              "type": "color",
+              "default": "#e6e3f8"
+            }
+          ]
+        },
+        {
+          "key": "sombre",
+          "label": "sombre",
+          "type": "object",
+          "default": {
+            "page": "#0b0b12",
+            "widget": "#0b0b12",
+            "header_debut": "#1e1b4b",
+            "header_fin": "#0b0b12",
+            "header_texte": "#f4f4f5",
+            "nav_fond": "#312e81",
+            "nav_texte": "#f4f4f5",
+            "message_fond": "#18181b",
+            "message_texte": "#f4f4f5",
+            "message_utilisateur_fond": "#4f46e5",
+            "bouton_fond": "#27272a",
+            "bouton_texte": "#f4f4f5",
+            "saisie_fond": "#0b0b12",
+            "champ_fond": "#18181b",
+            "bordure": "#312e81",
+            "avatar_fond": "#27272a",
+            "avatar_texte": "#f4f4f5",
+            "texte_attenue": "#a1a1aa"
+          },
+          "properties": [
+            {
+              "key": "page",
+              "label": "page",
+              "type": "color",
+              "default": "#0b0b12"
+            },
+            {
+              "key": "widget",
+              "label": "widget",
+              "type": "color",
+              "default": "#0b0b12"
+            },
+            {
+              "key": "header_debut",
+              "label": "header debut",
+              "type": "color",
+              "default": "#1e1b4b"
+            },
+            {
+              "key": "header_fin",
+              "label": "header fin",
+              "type": "color",
+              "default": "#0b0b12"
+            },
+            {
+              "key": "header_texte",
+              "label": "header texte",
+              "type": "color",
+              "default": "#f4f4f5"
+            },
+            {
+              "key": "nav_fond",
+              "label": "nav fond",
+              "type": "color",
+              "default": "#312e81"
+            },
+            {
+              "key": "nav_texte",
+              "label": "nav texte",
+              "type": "color",
+              "default": "#f4f4f5"
+            },
+            {
+              "key": "message_fond",
+              "label": "message fond",
+              "type": "color",
+              "default": "#18181b"
+            },
+            {
+              "key": "message_texte",
+              "label": "message texte",
+              "type": "color",
+              "default": "#f4f4f5"
+            },
+            {
+              "key": "message_utilisateur_fond",
+              "label": "message utilisateur fond",
+              "type": "color",
+              "default": "#4f46e5"
+            },
+            {
+              "key": "bouton_fond",
+              "label": "bouton fond",
+              "type": "color",
+              "default": "#27272a"
+            },
+            {
+              "key": "bouton_texte",
+              "label": "bouton texte",
+              "type": "color",
+              "default": "#f4f4f5"
+            },
+            {
+              "key": "saisie_fond",
+              "label": "saisie fond",
+              "type": "color",
+              "default": "#0b0b12"
+            },
+            {
+              "key": "champ_fond",
+              "label": "champ fond",
+              "type": "color",
+              "default": "#18181b"
+            },
+            {
+              "key": "bordure",
+              "label": "bordure",
+              "type": "color",
+              "default": "#312e81"
+            },
+            {
+              "key": "avatar_fond",
+              "label": "avatar fond",
+              "type": "color",
+              "default": "#27272a"
+            },
+            {
+              "key": "avatar_texte",
+              "label": "avatar texte",
+              "type": "color",
+              "default": "#f4f4f5"
+            },
+            {
+              "key": "texte_attenue",
+              "label": "texte attenue",
+              "type": "color",
+              "default": "#a1a1aa"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "data": {
+    "contracts": [
+      {
+        "key": "donnees_interface",
+        "label": "Données d'interface",
+        "description": "Tableaux/graphiques affichés par une instruction structurée",
+        "version": 1,
+        "loading": "lazy",
+        "inputs": [
+          {
+            "key": "resource_id",
+            "type": "string",
+            "required": false
+          },
+          {
+            "key": "limite",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "schema": {
+          "type": "object",
+          "properties": {
+            "colonnes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "lignes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "libelle": {
+                    "type": "string"
+                  },
+                  "valeur": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          },
+          "required": [
+            "colonnes",
+            "lignes"
+          ]
+        }
+      }
+    ]
+  },
+  "identificationModes": [
+    "contact",
+    "anonymous"
+  ],
+  "editor": {
+    "version": 1,
+    "regions": [
+      {
+        "id": "page",
+        "label": "Page"
+      },
+      {
+        "id": "header",
+        "label": "En-tête"
+      },
+      {
+        "id": "contact_nav",
+        "label": "Contacts directs",
+        "visibilityParam": "afficher_nav"
+      },
+      {
+        "id": "thread",
+        "label": "Discussion"
+      },
+      {
+        "id": "suggestions",
+        "label": "Sujets suggérés",
+        "visibilityParam": "afficher_sujets"
+      },
+      {
+        "id": "composer",
+        "label": "Saisie"
+      },
+      {
+        "id": "piece_jointe",
+        "label": "Pièce jointe",
+        "visibilityParam": "afficher_piece_jointe"
+      },
+      {
+        "id": "micro",
+        "label": "Micro",
+        "visibilityParam": "afficher_micro"
+      },
+      {
+        "id": "identity",
+        "label": "Identité"
+      },
+      {
+        "id": "avatar",
+        "label": "Avatar"
+      },
+      {
+        "id": "badge",
+        "label": "Badge",
+        "visibilityParam": "afficher_badge"
+      },
+      {
+        "id": "statut",
+        "label": "Statut",
+        "visibilityParam": "afficher_statut"
+      },
+      {
+        "id": "frappe",
+        "label": "Indicateur de frappe",
+        "visibilityParam": "afficher_frappe"
+      },
+      {
+        "id": "galerie",
+        "label": "Galerie",
+        "visibilityParam": "afficher_galerie"
+      },
+      {
+        "id": "fin",
+        "label": "Fin de discussion",
+        "visibilityParam": "afficher_fin"
+      },
+      {
+        "id": "lanceur",
+        "label": "Lanceur"
+      },
+      {
+        "id": "mode",
+        "label": "Mode actif",
+        "visibilityParam": "afficher_indicateur_mode"
+      }
+    ],
+    "bindings": [
+      {
+        "param": "titre_chat",
+        "regions": [
+          "header"
+        ],
+        "category": "content"
+      },
+      {
+        "param": "initiales",
+        "regions": [
+          "header"
+        ],
+        "category": "content"
+      },
+      {
+        "param": "badge",
+        "regions": [
+          "header"
+        ],
+        "category": "content"
+      },
+      {
+        "param": "statut",
+        "regions": [
+          "header"
+        ],
+        "category": "content"
+      },
+      {
+        "param": "message_accueil",
+        "regions": [
+          "thread"
+        ],
+        "category": "content"
+      },
+      {
+        "param": "sujets_suggeres",
+        "regions": [
+          "suggestions"
+        ],
+        "category": "content"
+      },
+      {
+        "param": "placeholder",
+        "regions": [
+          "composer"
+        ],
+        "category": "content"
+      },
+      {
+        "param": "libelle_identite",
+        "regions": [
+          "identity"
+        ],
+        "category": "content"
+      },
+      {
+        "param": "libelle_demarrer",
+        "regions": [
+          "identity"
+        ],
+        "category": "content"
+      },
+      {
+        "param": "telephone",
+        "regions": [
+          "contact_nav"
+        ],
+        "category": "content"
+      },
+      {
+        "param": "url_whatsapp",
+        "regions": [
+          "contact_nav",
+          "thread"
+        ],
+        "category": "action"
+      },
+      {
+        "param": "url_rdv",
+        "regions": [
+          "contact_nav",
+          "thread"
+        ],
+        "category": "action"
+      },
+      {
+        "param": "couleur_primaire",
+        "regions": [
+          "header",
+          "thread",
+          "composer"
+        ],
+        "category": "appearance"
+      },
+      {
+        "param": "couleur_fond",
+        "regions": [
+          "page",
+          "header",
+          "composer"
+        ],
+        "category": "appearance"
+      },
+      {
+        "param": "couleur_page",
+        "regions": [
+          "page"
+        ],
+        "category": "appearance"
+      },
+      {
+        "param": "couleur_accent",
+        "regions": [
+          "contact_nav",
+          "suggestions"
+        ],
+        "category": "appearance"
+      },
+      {
+        "param": "couleur_bordure",
+        "regions": [
+          "header",
+          "thread",
+          "composer"
+        ],
+        "category": "appearance"
+      },
+      {
+        "param": "mode_theme",
+        "regions": [
+          "page"
+        ],
+        "category": "appearance"
+      },
+      {
+        "param": "avatar_image",
+        "regions": [
+          "avatar",
+          "header",
+          "identity"
+        ],
+        "category": "appearance"
+      },
+      {
+        "param": "avatar_forme",
+        "regions": [
+          "avatar",
+          "header",
+          "identity"
+        ],
+        "category": "appearance"
+      },
+      {
+        "param": "apparence",
+        "regions": [
+          "page",
+          "header",
+          "contact_nav",
+          "thread",
+          "suggestions",
+          "composer",
+          "identity",
+          "avatar",
+          "badge",
+          "statut",
+          "frappe",
+          "galerie",
+          "fin",
+          "lanceur",
+          "mode"
+        ],
+        "category": "appearance"
+      },
+      {
+        "param": "afficher_avatar",
+        "regions": [
+          "avatar",
+          "header",
+          "thread"
+        ],
+        "category": "appearance"
+      },
+      {
+        "param": "afficher_badge",
+        "regions": [
+          "badge"
+        ],
+        "category": "appearance"
+      },
+      {
+        "param": "afficher_statut",
+        "regions": [
+          "statut"
+        ],
+        "category": "appearance"
+      },
+      {
+        "param": "afficher_piece_jointe",
+        "regions": [
+          "piece_jointe"
+        ],
+        "category": "appearance"
+      },
+      {
+        "param": "afficher_micro",
+        "regions": [
+          "micro"
+        ],
+        "category": "appearance"
+      },
+      {
+        "param": "afficher_horodatage",
+        "regions": [
+          "thread"
+        ],
+        "category": "appearance"
+      },
+      {
+        "param": "afficher_boutons_accueil",
+        "regions": [
+          "thread"
+        ],
+        "category": "appearance"
+      },
+      {
+        "param": "afficher_frappe",
+        "regions": [
+          "frappe"
+        ],
+        "category": "appearance"
+      },
+      {
+        "param": "afficher_sources",
+        "regions": [
+          "thread"
+        ],
+        "category": "appearance"
+      },
+      {
+        "param": "afficher_fin",
+        "regions": [
+          "fin"
+        ],
+        "category": "appearance"
+      },
+      {
+        "param": "afficher_icones",
+        "regions": [
+          "header",
+          "contact_nav",
+          "thread",
+          "composer",
+          "fin"
+        ],
+        "category": "appearance"
+      },
+      {
+        "param": "style_icones",
+        "regions": [
+          "header",
+          "contact_nav",
+          "thread",
+          "composer",
+          "fin"
+        ],
+        "category": "appearance"
+      },
+      {
+        "param": "protocole_cle",
+        "regions": [
+          "thread"
+        ],
+        "category": "content"
+      },
+      {
+        "param": "modes_actifs",
+        "regions": [
+          "mode"
+        ],
+        "category": "action"
+      },
+      {
+        "param": "mode_par_defaut",
+        "regions": [
+          "mode",
+          "header"
+        ],
+        "category": "content"
+      },
+      {
+        "param": "afficher_indicateur_mode",
+        "regions": [
+          "mode"
+        ],
+        "category": "appearance"
+      },
+      {
+        "param": "afficher_cartes_instruction",
+        "regions": [
+          "thread"
+        ],
+        "category": "appearance"
+      },
+      {
+        "param": "limite_lignes_tableau",
+        "regions": [
+          "thread"
+        ],
+        "category": "appearance"
+      },
+      {
+        "param": "libelles_interface",
+        "regions": [
+          "mode"
+        ],
+        "category": "content"
+      }
+    ]
+  }
+}

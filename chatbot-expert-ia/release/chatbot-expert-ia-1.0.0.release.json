@@ -1,0 +1,25 @@
+{
+  "id": "chatbot-expert-ia",
+  "version": "1.0.0",
+  "hostProtocol": "onirtech.template-host.v1",
+  "sha256": "6ef1967763082d8ce56cdf5db6f478eb27418570ccb39920caafd36b9b3b6bc8",
+  "files": [
+    "dist/index.js",
+    "docs/PROVENANCE.md",
+    "harness/host.mjs",
+    "onirtech.template.json",
+    "package-lock.json",
+    "package.json",
+    "README.md",
+    "src/Aurora.jsx",
+    "src/index.js",
+    "src/manifest.ts",
+    "src/styles.css",
+    "tests/template.test.jsx",
+    "tools/browser-check.mjs",
+    "tools/dev.mjs",
+    "tools/onirtech-template.mjs",
+    "vite.config.ts",
+    "vitest.config.mjs"
+  ]
+}

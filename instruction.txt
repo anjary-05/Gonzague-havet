@@ -1,0 +1,90 @@
+# ARCHITECTURE HIÉRARCHIQUE ET COMPOSITION RÉCURSIVE DES COMPOSANTS
+
+Conçois le système d'interface d'ONIR-CMS selon une architecture hiérarchique de composants imbriqués (Nested Component Architecture).
+
+## Principe fondamental
+
+Toute interface doit être considérée comme un arbre d'objets logiciels.
+
+Une page est composée de sections.
+Une section est composée de composants.
+Un composant peut contenir plusieurs sous-composants.
+Un sous-composant peut lui-même contenir d'autres composants.
+
+Cette composition doit être récursive, configurable et réutilisable.
+
+## 1. Hiérarchie des objets
+
+Implémenter les niveaux suivants :
+
+- Application / Experience
+- Page
+- Layout
+- Section
+- Component
+- Subcomponent
+- UI Element
+
+Ne pas imposer une profondeur fixe : un composant doit pouvoir contenir autant de niveaux que nécessaire, dans les limites de sécurité et de performance.
+
+## 2. Contrat universel des composants
+
+Chaque composant doit exposer :
+
+- id
+- type
+- name
+- version
+- props
+- children
+- state
+- events
+- actions
+- styles
+- dependencies
+
+Les enfants doivent pouvoir être déclarés comme références à des composants enregistrés ou comme instances configurées.
+
+## 3. Composition
+
+Créer un mécanisme permettant :
+
+- D'assembler plusieurs composants.
+- D'imbriquer des composants.
+- De réutiliser un même composant dans plusieurs expériences.
+- De modifier indépendamment chaque enfant.
+- De transmettre des propriétés du parent vers les enfants.
+- De gérer les événements entre composants.
+- De conserver les états des composants.
+- De contrôler les permissions et les dépendances.
+
+## 4. Génération par IA
+
+L'IA doit comprendre le catalogue des composants et leurs contrats.
+
+Lorsqu'elle doit créer une interface :
+
+1. Identifier l'expérience recherchée.
+2. Identifier sa structure hiérarchique.
+3. Sélectionner les composants parents.
+4. Sélectionner les composants enfants.
+5. Configurer leurs propriétés.
+6. Construire l'arbre de composition.
+7. Vérifier les contrats et la compatibilité.
+8. Transmettre l'arbre au moteur de rendu.
+
+L'IA ne doit pas créer arbitrairement des composants inexistants.
+
+## 5. Frontend Runtime
+
+Développer un renderer récursif capable de lire un arbre de composants et de construire l'interface React correspondante.
+
+Le renderer doit gérer les propriétés, les enfants, les événements, les états, les erreurs et les mises à jour dynamiques.
+
+Ne pas utiliser eval ou exécuter du code arbitraire généré par l'IA.
+
+## 6. Objectif
+
+Permettre à ONIR-CMS de construire des interfaces complexes comme une plateforme vidéo, une plateforme musicale, un jeu, un tableau de bord ou une application interactive en assemblant des objets logiciels indépendants.
+
+Le système doit être extensible sans modification du moteur central à chaque ajout d'un nouveau composant.
