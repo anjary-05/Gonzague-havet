@@ -91,6 +91,19 @@ function checkStructured(value, schema, at) {
   return errors;
 }
 
+function findParamNode(params, path) {
+  const segments = String(path ?? "").split(".");
+  if (segments.length === 0 || segments[0] === "") return null;
+  let current = (Array.isArray(params) ? params : []).find((entry) => entry?.key === segments[0]);
+  for (let index = 1; index < segments.length; index += 1) {
+    if (!isObject(current) || current.type !== "object") return null;
+    current = (Array.isArray(current.properties) ? current.properties : []).find(
+      (entry) => entry?.key === segments[index],
+    );
+  }
+  return current ?? null;
+}
+
 /** Contrôle des zones d'inspection V1 (ADR-0105). */
 function checkEditor(editor, params) {
   const errors = [];
@@ -98,20 +111,19 @@ function checkEditor(editor, params) {
   if (editor.version !== 1) errors.push("editor.version : 1 attendu");
   const regions = Array.isArray(editor.regions) ? editor.regions : [];
   const ids = new Set();
-  const keys = new Set((Array.isArray(params) ? params : []).map((param) => param?.key));
   regions.forEach((region, index) => {
     if (!isObject(region) || typeof region.id !== "string" || region.id === "") {
       errors.push(`editor.regions[${index}].id : requis`);
     } else {
       ids.add(region.id);
     }
-    if (region?.visibilityParam !== undefined && !keys.has(region.visibilityParam)) {
+    if (region?.visibilityParam !== undefined && findParamNode(params, region.visibilityParam) === null) {
       errors.push(`editor.regions[${index}].visibilityParam : paramètre inconnu ${region.visibilityParam}`);
     }
   });
   const bindings = Array.isArray(editor.bindings) ? editor.bindings : [];
   bindings.forEach((binding, index) => {
-    if (!keys.has(binding?.param)) errors.push(`editor.bindings[${index}].param : paramètre inconnu`);
+    if (findParamNode(params, binding?.param) === null) errors.push(`editor.bindings[${index}].param : paramètre inconnu`);
     if (!Array.isArray(binding?.regions) || binding.regions.length < 1) {
       errors.push(`editor.bindings[${index}].regions : au moins une zone`);
     } else {

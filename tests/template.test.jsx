@@ -350,34 +350,38 @@ it("applique les tokens visuels du paramètre structuré apparence", () => {
   expect(app.style.getPropertyValue("--send-bg")).toBe("#ff0000");
 });
 
-it("la couleur primaire globale pilote le bouton d'envoi quand apparence est au défaut", () => {
-  const ctx = createMockContext({
-    params: { couleur_primaire: "#ff0000" },
-    state: { phase: "chat", messages: [] },
-  });
-  const { el } = mount(ctx);
-  const app = el.shadowRoot.querySelector(".app");
-
-  expect(app.style.getPropertyValue("--primary")).toBe("#ff0000");
-  expect(app.style.getPropertyValue("--send-bg")).toBe("#ff0000");
-  expect(app.style.getPropertyValue("--msg-user-bg")).toBe("#ff0000");
-});
-
-it("une couleur apparence explicite reste prioritaire sur la couleur primaire", () => {
+it("le bouton d'envoi est piloté uniquement par sa propre couleur", () => {
   const ctx = createMockContext({
     params: {
-      couleur_primaire: "#ff0000",
-      apparence: { saisie: { fond_envoi: "#00ff00" } },
+      apparence: {
+        saisie: { fond_envoi: "#ff0000" },
+        bouton: { fond: "#123456" },
+      },
     },
     state: { phase: "chat", messages: [] },
   });
   const { el } = mount(ctx);
   const app = el.shadowRoot.querySelector(".app");
 
-  expect(app.style.getPropertyValue("--send-bg")).toBe("#00ff00");
+  expect(app.style.getPropertyValue("--send-bg")).toBe("#ff0000");
+  expect(app.style.getPropertyValue("--btn-bg")).toBe("#123456");
+  expect(el.shadowRoot.querySelector('[data-onir-region="bouton_envoi"]')).not.toBeNull();
 });
 
-it("le groupe bouton pilote les boutons d’accueil et d’action, pas l’envoi", () => {
+it("le bouton Démarrer est piloté par ses propres couleurs", () => {
+  const ctx = createMockContext({
+    params: { apparence: { identite: { fond_bouton: "#abcdef", texte_bouton: "#111111" } } },
+    state: { phase: "identity", messages: [] },
+  });
+  const { el } = mount(ctx);
+  const app = el.shadowRoot.querySelector(".app");
+
+  expect(app.style.getPropertyValue("--id-btn-bg")).toBe("#abcdef");
+  expect(app.style.getPropertyValue("--id-btn-fg")).toBe("#111111");
+  expect(el.shadowRoot.querySelector('[data-onir-region="bouton_identite"]')).not.toBeNull();
+});
+
+it("les boutons d'action ont leur propre couleur, sans effet sur l'envoi", () => {
   const ctx = createMockContext({
     params: { apparence: { bouton: { fond: "#123456" } } },
     state: { phase: "chat", messages: [] },
@@ -399,19 +403,6 @@ it("une couleur de lanceur personnalisée remplace le dégradé de marque", () =
 
   expect(app.style.getPropertyValue("--launcher-bg")).toBe("#654321");
   expect(app.style.getPropertyValue("--launcher-gradient")).toContain("#654321");
-});
-
-it("les couleurs simples de page et de bordure pilotent leurs tokens quand apparence est au défaut", () => {
-  const ctx = createMockContext({
-    params: { couleur_page: "#111111", couleur_bordure: "#222222" },
-    state: { phase: "chat", messages: [] },
-  });
-  const { el } = mount(ctx);
-  const app = el.shadowRoot.querySelector(".app");
-
-  expect(app.style.getPropertyValue("--page-bg")).toBe("#111111");
-  expect(app.style.getPropertyValue("--widget-border")).toBe("#222222");
-  expect(app.style.getPropertyValue("--input-border")).toBe("#222222");
 });
 
 it("masque horodatage, boutons d'accueil et indicateur de frappe", () => {

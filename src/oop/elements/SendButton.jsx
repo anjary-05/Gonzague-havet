@@ -14,6 +14,7 @@ export class SendButton extends ButtonElement {
       domId: "send",
       className: "send",
       buttonType: "submit",
+      region: "bouton_envoi",
       iconSize: 20,
     });
   }

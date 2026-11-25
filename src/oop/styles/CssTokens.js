@@ -4,35 +4,7 @@ import {
 import { AVATAR_SHAPES } from "../../app/config/InterfaceConfig.js";
 import { asNumber, asText } from "../../utils/format.js";
 
-// Palette simple (paramètres historiques) et defaults du bloc `apparence`.
-// Une couleur simple n'agit que si elle a été personnalisée : ainsi les
-// réglages avancés par composant restent prioritaires.
-const SIMPLE_COLOR_DEFAULTS = {
-  couleur_primaire: "#4f46e5",
-  couleur_fond: "#f7f7fa",
-  couleur_page: "#f7f7fa",
-  couleur_accent: "#eef2ff",
-  couleur_bordure: "#e3e4ea",
-};
-
-const APPEARANCE_COLOR_DEFAULTS = {
-  "page.fond": "#f7f7fa",
-  "widget.fond": "#f7f7fa",
-  "widget.bordure": "#e3e4ea",
-  "nav.fond": "#eef2ff",
-  "message.fond_utilisateur": "#4f46e5",
-  "saisie.bordure": "#e3e4ea",
-  "saisie.fond_envoi": "#4f46e5",
-  "suggestions.bordure_puce": "#e3e4ea",
-  "pj.bordure": "#e3e4ea",
-  "identite.bordure_champ": "#e3e4ea",
-  "identite.fond_bouton": "#4f46e5",
-  "identite.accent_case": "#4f46e5",
-  "galerie.bordure": "#e3e4ea",
-  "lanceur.fond": "#4f46e5",
-  "agent.bordure_carte": "#e3e4ea",
-  "agent.bordure_table": "#e3e4ea",
-};
+const LAUNCHER_DEFAULT = "#4f46e5";
 
 // Toute la charte est un objet de tokens : la vue ne contient aucune couleur en dur.
 class CssTokenService {
@@ -80,30 +52,8 @@ class CssTokenService {
     return typeof value === "boolean" ? value : fallback;
   }
 
-  isSimpleOverride(key) {
-    const value = this.params?.[key];
-    return value !== undefined && value !== null && value !== SIMPLE_COLOR_DEFAULTS[key];
-  }
-
-  resolveColor(path, fallback, globalKey) {
-    const raw = this.appearance(path, undefined);
-    const appearanceDefault = APPEARANCE_COLOR_DEFAULTS[path];
-    if (raw !== undefined && (appearanceDefault === undefined || raw !== appearanceDefault)) {
-      return raw;
-    }
-    if (globalKey && this.isSimpleOverride(globalKey)) {
-      return this.params[globalKey];
-    }
-    return raw !== undefined ? raw : fallback;
-  }
-
   build() {
     const tokens = { ...(this.dark ? DARK : LIGHT) };
-    if (this.params?.couleur_primaire != null) tokens.primary = this.param("couleur_primaire");
-    if (this.params?.couleur_fond != null) tokens.bg = this.param("couleur_fond");
-    if (this.params?.couleur_page != null) tokens.page = this.param("couleur_page");
-    if (this.params?.couleur_accent != null) tokens.accent = this.param("couleur_accent");
-    if (this.params?.couleur_bordure != null) tokens.border = this.param("couleur_bordure");
 
     this.style = {
       "--bg": tokens.bg,
@@ -159,11 +109,11 @@ class CssTokenService {
       this.style["--page"] = this.appText("sombre.page", tokens.page);
     }
 
-    this.color("page.fond", "--page-bg", tokens.page, "page", "couleur_page");
+    this.color("page.fond", "--page-bg", tokens.page, "page");
     this.num("page.marge_verticale", "--page-py", 24);
     this.num("page.marge_laterale", "--page-px", 12);
-    this.color("widget.fond", "--widget-bg", tokens.bg, "widget", "couleur_fond");
-    this.color("widget.bordure", "--widget-border", tokens.border, "bordure", "couleur_bordure");
+    this.color("widget.fond", "--widget-bg", tokens.bg, "widget");
+    this.color("widget.bordure", "--widget-border", tokens.border, "bordure");
     this.num("widget.largeur_bordure", "--widget-border-width", 1);
     this.num("widget.rayon", "--widget-radius", 22);
     this.str("widget.ombre", "--widget-shadow", "0 24px 60px rgba(30, 27, 58, 0.28)");
@@ -195,7 +145,7 @@ class CssTokenService {
       ? "0 0 0 var(--avatar-border-width) var(--avatar-border-color)"
       : "none";
 
-    this.color("nav.fond", "--nav-bg", tokens.accent, "nav_fond", "couleur_accent");
+    this.color("nav.fond", "--nav-bg", tokens.accent, "nav_fond");
     this.num("nav.opacite", "--nav-opacity", 0.75, "");
     this.color("nav.texte", "--nav-fg", tokens.fg, "nav_texte");
     this.num("nav.taille_texte", "--nav-font-size", 13.5);
@@ -206,7 +156,7 @@ class CssTokenService {
 
     this.color("message.fond", "--msg-bg", tokens.card, "message_fond");
     this.color("message.texte", "--msg-fg", tokens.fg, "message_texte");
-    this.color("message.fond_utilisateur", "--msg-user-bg", tokens.primary, "message_utilisateur_fond", "couleur_primaire");
+    this.color("message.fond_utilisateur", "--msg-user-bg", tokens.primary, "message_utilisateur_fond");
     this.color("message.texte_utilisateur", "--msg-user-fg", tokens.primaryFg);
     this.num("message.rayon", "--msg-radius", 18);
     this.num("message.marge_interne", "--msg-pad", 16);
@@ -230,27 +180,25 @@ class CssTokenService {
     this.color("suggestions.texte", "--chips-fg", tokens.mutedFg, "texte_attenue");
     this.color("suggestions.fond_puce", "--chip-bg", tokens.card, "champ_fond");
     this.color("suggestions.texte_puce", "--chip-fg", tokens.mutedFg, "texte_attenue");
-    this.color("suggestions.bordure_puce", "--chip-border", tokens.border, "bordure", "couleur_bordure");
+    this.color("suggestions.bordure_puce", "--chip-border", tokens.border, "bordure");
     this.num("suggestions.rayon_puce", "--chip-radius", 999);
     this.num("suggestions.hauteur_puce", "--chip-height", 44);
     this.num("suggestions.taille_puce", "--chip-font-size", 15);
 
-    this.color("saisie.fond", "--composer-bg", tokens.bg, "saisie_fond");
     this.color("saisie.fond_champ", "--input-bg", tokens.card, "champ_fond");
     this.color("saisie.texte", "--input-fg", tokens.fg);
     this.color("saisie.placeholder", "--input-placeholder", tokens.mutedFg, "texte_attenue");
-    this.color("saisie.bordure", "--input-border", tokens.border, "bordure", "couleur_bordure");
+    this.color("saisie.bordure", "--input-border", tokens.border, "bordure");
     this.num("saisie.rayon_champ", "--input-radius", 14);
     this.num("saisie.hauteur_champ", "--input-height", 48);
     this.num("saisie.taille_texte", "--input-font-size", 15);
     this.color("saisie.couleur_icone", "--icon-fg", tokens.mutedFg, "texte_attenue");
-    this.color("saisie.fond_envoi", "--send-bg", tokens.primary, undefined, "couleur_primaire");
+    this.color("saisie.fond_envoi", "--send-bg", tokens.primary);
     this.color("saisie.texte_envoi", "--send-fg", tokens.primaryFg);
-    this.num("saisie.rayon_envoi", "--send-radius", 14);
     this.num("saisie.taille_envoi", "--send-size", 48);
     this.num("saisie.opacite_desactive", "--disabled-opacity", 0.55, "");
     this.color("pj.fond", "--tray-bg", tokens.card, "champ_fond");
-    this.color("pj.bordure", "--tray-border", tokens.border, "bordure", "couleur_bordure");
+    this.color("pj.bordure", "--tray-border", tokens.border, "bordure");
     this.color("pj.texte", "--tray-fg", tokens.fg, "message_texte");
     this.num("pj.rayon", "--tray-radius", 12);
     this.num("pj.taille_image", "--tray-img-size", 36);
@@ -265,22 +213,22 @@ class CssTokenService {
     this.num("identite.taille_titre", "--id-title-size", 18);
     this.color("identite.texte_description", "--id-text-fg", tokens.mutedFg, "texte_attenue");
     this.color("identite.fond_champ", "--id-input-bg", tokens.card, "champ_fond");
-    this.color("identite.bordure_champ", "--id-input-border", tokens.border, "bordure", "couleur_bordure");
+    this.color("identite.bordure_champ", "--id-input-border", tokens.border, "bordure");
     this.num("identite.rayon_champ", "--id-input-radius", 12);
     this.num("identite.hauteur_champ", "--id-input-height", 46);
-    this.color("identite.fond_bouton", "--id-btn-bg", tokens.primary, undefined, "couleur_primaire");
+    this.color("identite.fond_bouton", "--id-btn-bg", tokens.primary);
     this.color("identite.texte_bouton", "--id-btn-fg", tokens.primaryFg);
     this.num("identite.rayon_bouton", "--id-btn-radius", 14);
     this.num("identite.hauteur_bouton", "--id-btn-height", 48);
-    this.color("identite.accent_case", "--id-check-accent", tokens.primary, undefined, "couleur_primaire");
+    this.color("identite.accent_case", "--id-check-accent", tokens.primary);
     this.color("galerie.fond", "--gallery-bg", tokens.bg, "saisie_fond");
-    this.color("galerie.bordure", "--gallery-border", tokens.border, "bordure", "couleur_bordure");
+    this.color("galerie.bordure", "--gallery-border", tokens.border, "bordure");
     this.num("galerie.taille_miniature", "--gallery-thumb-size", 52);
     this.num("galerie.rayon_miniature", "--gallery-thumb-radius", 10);
     this.color("fin.couleur", "--finish-fg", tokens.mutedFg, "texte_attenue");
     this.num("fin.taille_texte", "--finish-font-size", 13);
     this.num("fin.taille_icone", "--finish-icon-size", 14);
-    this.color("lanceur.fond", "--launcher-bg", tokens.primary, undefined, "couleur_primaire");
+    this.color("lanceur.fond", "--launcher-bg", tokens.primary);
     this.color("lanceur.texte", "--launcher-fg", tokens.primaryFg);
     this.num("lanceur.taille", "--launcher-size", 60);
     this.str("lanceur.ombre", "--launcher-shadow", "0 0 0 4px rgba(99, 102, 241, 0.2), 0 25px 50px -12px rgba(0, 0, 0, 0.25)");
@@ -289,14 +237,14 @@ class CssTokenService {
     // pour que le réglage ait un effet réel.
     const launcherBg = this.style["--launcher-bg"];
     this.style["--launcher-gradient"] =
-      launcherBg && launcherBg !== APPEARANCE_COLOR_DEFAULTS["lanceur.fond"]
+      launcherBg && launcherBg !== LAUNCHER_DEFAULT
         ? `linear-gradient(135deg, ${launcherBg} 0%, ${launcherBg} 100%)`
         : "linear-gradient(135deg, #4f46e5 0%, #6366f1 50%, #818cf8 100%)";
     this.color("sources.couleur", "--sources-fg", tokens.mutedFg, "texte_attenue");
     this.num("sources.taille_texte", "--sources-font-size", 12);
 
     this.color("agent.fond_carte", "--agent-card-bg", tokens.card, "champ_fond");
-    this.color("agent.bordure_carte", "--agent-card-border", tokens.border, "bordure", "couleur_bordure");
+    this.color("agent.bordure_carte", "--agent-card-border", tokens.border, "bordure");
     this.num("agent.rayon_carte", "--agent-card-radius", 14);
     this.color("agent.texte_carte", "--agent-card-fg", tokens.fg, "message_texte");
     this.color("agent.fond_mode", "--agent-mode-bg", tokens.secondary, "bouton_fond");
@@ -307,7 +255,7 @@ class CssTokenService {
     this.color("agent.fond_dialogue", "--agent-dialog-bg", tokens.card, "champ_fond");
     this.color("agent.texte_dialogue", "--agent-dialog-fg", tokens.fg, "message_texte");
     this.color("agent.fond_table", "--agent-table-bg", tokens.bg, "saisie_fond");
-    this.color("agent.bordure_table", "--agent-table-border", tokens.border, "bordure", "couleur_bordure");
+    this.color("agent.bordure_table", "--agent-table-border", tokens.border, "bordure");
     this.num("agent.taille_table", "--agent-table-size", 12);
     this.color("agent.fond_entete_table", "--agent-table-head", tokens.secondary, "bouton_fond");
 
@@ -317,10 +265,10 @@ class CssTokenService {
     return this.style;
   }
 
-  color(path, cssVar, fallback, darkKey, globalKey) {
+  color(path, cssVar, fallback, darkKey) {
     this.style[cssVar] = this.dark && darkKey
       ? this.appText(`sombre.${darkKey}`, fallback)
-      : this.resolveColor(path, fallback, globalKey);
+      : this.appText(path, fallback);
   }
 
   str(path, cssVar, fallback) {

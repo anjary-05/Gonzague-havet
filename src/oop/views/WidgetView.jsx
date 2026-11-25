@@ -13,6 +13,7 @@ export class WidgetView extends SectionNode {
         className="widget"
         style={surface === "page" ? { maxWidth: "100%" } : undefined}
         aria-label={`Discussion avec l’assistant de ${titre}`}
+        data-onir-region="widget"
         onPaste={onPaste}
       >
         {children}

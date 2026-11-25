@@ -32,6 +32,7 @@ export class HeaderView extends SectionNode {
         {typeof toggleTheme === "function" ? (
           <button
             className="theme-toggle"
+            data-onir-region="theme"
             type="button"
             onClick={toggleTheme}
             aria-label={dark ? "Passer au thème clair" : "Passer au thème sombre"}

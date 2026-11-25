@@ -39,7 +39,7 @@ export class IdentityView extends SectionNode {
               </span>
             </label>
           ) : null}
-          <button className="primary-btn" type="submit" disabled={submitting}>
+          <button className="primary-btn" type="submit" disabled={submitting} data-onir-region="bouton_identite">
             {libelleDemarrer}
           </button>
         </form>

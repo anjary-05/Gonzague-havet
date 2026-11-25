@@ -53,12 +53,12 @@ export class MessageView extends SubComponentNode {
           ))}
           {hasBody ? <p>{message.content}</p> : null}
           {knowledge.length && voirSources ? (
-            <div className="sources">
+            <div className="sources" data-onir-region="sources">
               Références : {knowledge.map((item) => item.titre || item.ref).join(", ")}
             </div>
           ) : null}
           {showActions ? (
-            <div className="actions">
+            <div className="actions" data-onir-region="boutons_action">
               {welcomeActions.map((bouton) =>
                 safeExternalLink(
                   bouton.url,

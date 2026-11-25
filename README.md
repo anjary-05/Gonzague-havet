@@ -38,7 +38,7 @@ URLs utiles du harness :
 - `http://localhost:4500/?phase=chat&fallback=1` → menu de secours.
 
 L’archive est générée dans
-`release/chatbot-expert-ia-1.3.26.onirtech-template`.
+`release/chatbot-expert-ia-1.3.27.onirtech-template`.
 
 ## Ce qui est câblé au SDK
 
@@ -53,8 +53,8 @@ L’archive est générée dans
 - **Aucun réseau dans le template** : aucun `fetch` ; liens WhatsApp/téléphone/
   rendez-vous conservés tels quels et ouverts via `actions.openMedia()` quand
   c’est disponible.
-- **51 paramètres publics** (clés snake_case, `default` obligatoire) :
-  47 paramètres simples (textes, couleurs, dimensions, visibilité, forme de
+- **46 paramètres publics** (clés snake_case, `default` obligatoire) :
+  42 paramètres simples (textes, couleurs, dimensions, visibilité, forme de
   l’avatar, style des icônes, protocole d’interface agentique, modes actifs,
   limite de tableau), les listes structurées `sujets_suggeres` et
   `modes_actifs`, et les objets structurés `apparence` (149 tokens) et
@@ -64,20 +64,21 @@ L’archive est générée dans
   `frappe`, `identite`, `galerie`, `fin`, `lanceur`, `sources`, `agent`, `sombre`) :
   couleurs, tailles, rayons, ombres, opacités, espacements et animations. Le
   groupe `sombre` pilotise la palette dark.
-- **Priorité des couleurs** : une couleur `apparence` personnalisée (différente
-  de son défaut) est prioritaire ; sinon une couleur simple (`couleur_primaire`,
-  `couleur_fond`, `couleur_page`, `couleur_accent`, `couleur_bordure`)
-  personnalisée s’applique ; sinon le défaut `apparence` est utilisé. Une
-  couleur simple laissée à son défaut ne masque donc plus les réglages avancés.
-- **Groupes explicites** : `bouton` = boutons d’accueil, d’action et de
-  confirmation ; `saisie` = champ de message et **bouton d’envoi**. Le lanceur
-  personnalisé utilise sa couleur solide, sinon le dégradé de marque par défaut.
-- **Zones d’inspection V1** (ADR-0105) : 15 regions (`page`, `header`,
-  `contact_nav`, `thread`, `suggestions`, `composer`, `identity`, `avatar`,
-  `badge`, `statut`, `frappe`, `galerie`, `fin`, `lanceur`, `mode`), avec
-  `data-onir-region` sur des conteneurs stables et `editor.bindings` — dont
-  `apparence`, `avatar_image`, `avatar_forme`, `style_icones` et les commutateurs
-  d’affichage.
+- **Couleurs par élément, sans priorité globale** : chaque zone inspectée ne
+  montre que ses propres champs de couleur. Le bouton d’envoi possède la zone
+  `bouton_envoi` et les champs `apparence.saisie.fond_envoi`,
+  `apparence.saisie.texte_envoi`, `apparence.saisie.taille_envoi`. Le bouton
+  Démarrer possède la zone `bouton_identite`. Les boutons d’action possèdent la
+  zone `boutons_action`. Aucun paramètre `couleur_*` global ne peut les écraser.
+- **Groupes explicites** : `bouton` = boutons d’action ; `saisie` = champ de
+  message ; le bouton d’envoi est une zone séparée. Le lanceur personnalisé
+  utilise sa couleur solide, sinon le dégradé de marque par défaut.
+- **Zones d’inspection V1** (ADR-0105) : zones dédiées (`page`, `widget`,
+  `header`, `contact_nav`, `thread`, `suggestions`, `composer`, `bouton_envoi`,
+  `boutons_action`, `identity`, `bouton_identite`, `avatar`, `badge`, `statut`,
+  `frappe`, `galerie`, `sources`, `fin`, `lanceur`, `theme`, `mode`) avec
+  `data-onir-region` sur les conteneurs stables et `editor.bindings` vers des
+  chemins imbriqués.
 - **Identifiants** : `identificationModes: ["contact", "anonymous"]`.
 
 ## Fidélité au HTML d’origine
