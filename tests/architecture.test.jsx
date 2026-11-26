@@ -20,7 +20,8 @@ const CONTRACT_KEYS = [
 
 const EXPECTED_TYPES = [
   "experience", "page", "layout", "widget", "header", "identity",
-  "contact-nav", "thread", "message", "typing", "final-state",
+  "contact-nav", "thread", "message", "markdown", "media-part", "tool-result",
+  "block-fallback", "otp", "typing", "final-state",
   "instruction-item", "instruction-card", "resource-grid", "data-table",
   "chart", "action-buttons", "instruction-confirm", "gallery", "chips",
   "attachment-tray", "composer", "finish", "launcher",

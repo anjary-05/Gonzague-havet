@@ -1,7 +1,14 @@
+import { cloneElement, isValidElement } from "react";
 import { SubComponentNode } from "../core/ComponentNode.js";
 import { safeExternalLink } from "../../utils/Link.jsx";
 import { Avatar } from "../elements/Avatar.jsx";
 import { IconGlyph } from "../elements/IconGlyph.jsx";
+import { MultimodalContent } from "../models/MultimodalContent.js";
+import { createPartView } from "../core/ContentRegistry.js";
+
+function withKey(element, key) {
+  return isValidElement(element) ? cloneElement(element, { key }) : element;
+}
 
 export class MessageView extends SubComponentNode {
   constructor(contract = {}) {
@@ -12,14 +19,25 @@ export class MessageView extends SubComponentNode {
     const {
       message = {}, role = "assistant", index = 0, initiales, actions = {},
       voirHorodatage, voirSources, voirBoutonsAccueil, statusFinalisee,
-      welcomeActions = [],
+      welcomeActions = [], voirMarkdown = true, voirMultimodal = true,
+      voirContenuGenere = true,
     } = this.props;
-    const medias = Array.isArray(message.medias) ? message.medias : [];
-    const attachments = Array.isArray(message.attachments) ? message.attachments : [];
+
+    // Objet générique : texte Markdown + parties multimodales/générées.
+    const content = MultimodalContent.from(message, {
+      markdown: voirMarkdown,
+      multimodal: voirMultimodal,
+      generated: voirContenuGenere,
+    });
     const knowledge = Array.isArray(message.knowledge) ? message.knowledge : [];
     const mood = message.userState ?? null;
-    const hasBody = typeof message.content === "string" && message.content !== "";
     const showActions = role === "assistant" && index === 0 && !statusFinalisee && voirBoutonsAccueil;
+    const messageId = message.id || `m-${index}`;
+    // Les messages d'outils sont exposés avec `role: assistant` ; `authorName`
+    // permet de les signer sans changer le rôle (contrat hôte v1).
+    const authorName = typeof message.authorName === "string" && message.authorName.trim() !== ""
+      ? message.authorName.trim()
+      : "";
 
     return (
       <li className={`msg ${role}`}>
@@ -28,30 +46,16 @@ export class MessageView extends SubComponentNode {
           className="bubble"
           title={mood ? `${mood.label || "neutral"} (${Math.round(Number(mood.confidence || 0) * 100)}%)` : undefined}
         >
-          {medias.map((media, mediaIndex) =>
-            media?.type === "photo" ? (
-              <img className="m-img" key={`media-${mediaIndex}`} src={media.url} alt={media.libelle || ""} />
-            ) : (
-              <button
-                className="m-file"
-                type="button"
-                key={`media-${mediaIndex}`}
-                onClick={() => {
-                  if (typeof media?.url === "string" && /^https?:\/\//i.test(media.url) && typeof actions.openMedia === "function") {
-                    actions.openMedia(media.url);
-                  }
-                }}
-              >
-                {media.libelle || "Lien"}
-              </button>
-            ),
-          )}
-          {attachments.map((attachment, attachmentIndex) => (
-            <span className="m-file" key={`att-${attachmentIndex}`}>
-              {attachment.originalName || attachment.fieldLabel || "Pièce jointe"}
-            </span>
-          ))}
-          {hasBody ? <p>{message.content}</p> : null}
+          {authorName !== "" ? <div className="msg-author">{authorName}</div> : null}
+          {content.parts.map((part, partIndex) => {
+            // Le choix de la vue est dynamique : une nouvelle partie n'exige
+            // qu'une entrée dans `ContentRegistry`, jamais un if ici.
+            const view = createPartView(part, {
+              actions,
+              markdown: voirMarkdown,
+            }, `message-${messageId}-part-${partIndex}`);
+            return view ? withKey(view.renderElement(), `part-${partIndex}`) : null;
+          })}
           {knowledge.length && voirSources ? (
             <div className="sources" data-onir-region="sources">
               Références : {knowledge.map((item) => item.titre || item.ref).join(", ")}

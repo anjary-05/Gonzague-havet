@@ -8,6 +8,11 @@ import { IdentityView } from "./IdentityView.jsx";
 import { NavView } from "./NavView.jsx";
 import { ThreadView } from "./ThreadView.jsx";
 import { MessageView } from "./MessageView.jsx";
+import { MarkdownView } from "./MarkdownView.jsx";
+import { MediaPartView } from "./MediaPartView.jsx";
+import { ToolResultView } from "./ToolResultView.jsx";
+import { BlockFallbackView } from "./BlockFallbackView.jsx";
+import { OtpView } from "./OtpView.jsx";
 import { TypingView } from "./TypingView.jsx";
 import { FinalStateView } from "./FinalStateView.jsx";
 import { InstructionItemView } from "./InstructionItemView.jsx";
@@ -35,6 +40,11 @@ componentRegistry.registerAll({
   "contact-nav": NavView,
   thread: ThreadView,
   message: MessageView,
+  markdown: MarkdownView,
+  "media-part": MediaPartView,
+  "tool-result": ToolResultView,
+  "block-fallback": BlockFallbackView,
+  otp: OtpView,
   typing: TypingView,
   "final-state": FinalStateView,
   "instruction-item": InstructionItemView,

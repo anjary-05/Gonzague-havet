@@ -1,6 +1,6 @@
 import { componentRegistry } from "../../oop/views/ViewRegistry.js";
 
-const VERSION = "1.3.25";
+const VERSION = "1.5.0";
 
 // Fabrique générique : chaque nœud porte le contrat universel complet.
 function node(type, id, props = {}, children = [], meta = {}) {
@@ -26,6 +26,7 @@ export function buildExperienceTree(model) {
     statusFinalisee, typing, instructions, shownMessages, dataResult, pending,
     chips, menu, resources, actions, send, addFiles, removeAttachment,
     closeDiscussion, openDiscussion, submitIdentity, submitMessage,
+    otpChallenge, otpEmail, otpError, requestOtp, verifyOtp, resendOtp, backToOtpEmail,
     threadRef, fileRef, audioRef, setDraft, draft, resolveResources,
     voirAvatar, avatarUrl, initiales, voirBadge, badge, voirMode, modesActifs,
     activeMode, lib, voirStatut, statut, libelleIdentite, libelleDemarrer,
@@ -33,6 +34,7 @@ export function buildExperienceTree(model) {
     canMedia, voirHorodatage, voirSources, voirBoutonsAccueil, voirFrappe,
     voirCartes, voirFin, libelleTerminer, texteFinalise, placeholder,
     accept, multiple, limiteTableau, canData, canModelForm, welcomeActions,
+    voirMarkdown, voirMultimodal, voirContenuGenere,
   } = model;
 
   const experience = node("experience", "experience-expert-ia", {}, [], {
@@ -65,7 +67,12 @@ export function buildExperienceTree(model) {
         void addFiles(files);
       }
     },
-  }, [], { dependencies: ["header", phase === "identity" ? "identity" : "thread"] });
+  }, [], {
+    dependencies: [
+      "header",
+      phase === "identity" ? "identity" : phase === "otp" ? "otp" : "thread",
+    ],
+  });
   layout.add(widget);
 
   widget.add(node("header", "section-header", {
@@ -79,6 +86,21 @@ export function buildExperienceTree(model) {
       voirAvatar, avatarUrl, initiales, libelleIdentite, titre, consent,
       submitIdentity, submitting: model.submitting, libelleDemarrer,
     }, [], { state: { phase: "identity" }, actions: [{ id: "submitIdentity" }] }));
+    return experience;
+  }
+
+  // Contrat hôte v1 : l'identification peut passer par un code à 6 chiffres.
+  if (phase === "otp") {
+    widget.add(node("otp", "section-otp", {
+      voirAvatar, avatarUrl, initiales, titre, consent,
+      challenge: otpChallenge, email: otpEmail, error: otpError,
+      submitting: model.submitting,
+      onRequest: requestOtp, onVerify: verifyOtp,
+      onResend: resendOtp, onBack: backToOtpEmail,
+    }, [], {
+      state: { phase: "otp" },
+      actions: [{ id: "requestOtp" }, { id: "verifyOtp" }],
+    }));
     return experience;
   }
 
@@ -99,6 +121,7 @@ export function buildExperienceTree(model) {
       role: message.role === "user" ? "user" : "assistant",
       index, initiales, actions, voirHorodatage, voirSources,
       voirBoutonsAccueil, statusFinalisee, welcomeActions,
+      voirMarkdown, voirMultimodal, voirContenuGenere,
     }, [], { actions: [{ id: "openMedia" }] }));
   });
 

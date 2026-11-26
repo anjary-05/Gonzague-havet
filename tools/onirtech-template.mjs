@@ -8,7 +8,12 @@ import { join, relative, sep } from "node:path";
 import { zipSync } from "fflate";
 
 const HOST_PROTOCOL = "onirtech.template-host.v1";
-const SKIP = new Set(["node_modules", ".git", "release", ".DS_Store"]);
+// `chatbot-expert-ia/` est l'ancienne arborescence legacy conservée dans le
+// dépôt : l'emballer produisait une archive avec DEUX manifestes (1.4.0 à la
+// racine, 1.3.25 imbriqué) et l'installateur pouvait charger l'ancien bundle.
+// Un template actif est toujours packé depuis sa racine, jamais avec ses copies
+// historiques.
+const SKIP = new Set(["node_modules", ".git", "release", "chatbot-expert-ia", ".DS_Store"]);
 
 const [cmd, dirArg] = process.argv.slice(2);
 const dir = join(process.cwd(), dirArg ?? ".");

@@ -1,6 +1,6 @@
 import { SubComponentNode } from "../core/ComponentNode.js";
 import { ACTION_COMMANDS } from "../../app/config/InterfaceConfig.js";
-import { asText } from "../../utils/format.js";
+import { asText, toOpenableUrl } from "../../utils/format.js";
 
 export class ActionButtonsView extends SubComponentNode {
   constructor(contract = {}) {
@@ -31,8 +31,9 @@ export class ActionButtonsView extends SubComponentNode {
                 type="button"
                 key={index}
                 onClick={() => {
-                  if (typeof items[0]?.url === "string" && /^https?:\/\//i.test(items[0].url) && typeof actions.openMedia === "function") {
-                    actions.openMedia(items[0].url);
+                  const openUrl = toOpenableUrl(items[0]?.url);
+                  if (openUrl !== "" && typeof actions.openMedia === "function") {
+                    actions.openMedia(openUrl);
                   }
                 }}
               >

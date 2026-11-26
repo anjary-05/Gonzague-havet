@@ -1,4 +1,5 @@
 import { SectionNode } from "../core/ComponentNode.js";
+import { toOpenableUrl } from "../../utils/format.js";
 
 export class GalleryView extends SectionNode {
   constructor(contract = {}) {
@@ -10,7 +11,8 @@ export class GalleryView extends SectionNode {
     const photos = Array.isArray(resources.media?.photos) ? resources.media.photos : [];
     const liens = Array.isArray(resources.media?.liens) ? resources.media.liens : [];
     const ouvrir = (url) => {
-      if (typeof actions?.openMedia === "function") actions.openMedia(url);
+      const openUrl = toOpenableUrl(url);
+      if (openUrl !== "" && typeof actions?.openMedia === "function") actions.openMedia(openUrl);
     };
     return (
       <div className="gallery" aria-label="Médias du chatbot" data-onir-region="galerie">

@@ -1,5 +1,5 @@
 import { SubComponentNode } from "../core/ComponentNode.js";
-import { isHttpUrl } from "../../utils/format.js";
+import { toOpenableUrl } from "../../utils/format.js";
 
 export class ResourceGridView extends SubComponentNode {
   constructor(contract = {}) {
@@ -17,9 +17,10 @@ export class ResourceGridView extends SubComponentNode {
             type="button"
             key={`${item.id || "r"}-${index}`}
             onClick={() => {
-              if (isHttpUrl(item.url) && typeof actions.openMedia === "function") actions.openMedia(item.url);
+              const openUrl = toOpenableUrl(item.url);
+              if (openUrl !== "" && typeof actions.openMedia === "function") actions.openMedia(openUrl);
             }}
-            title={isHttpUrl(item.url) ? lib("ouvrir", "Ouvrir") : item.libelle || ""}
+            title={toOpenableUrl(item.url) !== "" ? lib("ouvrir", "Ouvrir") : item.libelle || ""}
           >
             {item.kind === "photo" && item.url ? <img src={item.url} alt={item.libelle || ""} /> : null}
             <span>{item.libelle || item.id || lib("ouvrir", "Ouvrir")}</span>

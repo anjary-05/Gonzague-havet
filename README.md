@@ -36,20 +36,23 @@ URLs utiles du harness :
 - `http://localhost:4500/?phase=chat` → phase chat directe (rendu identique au HTML).
 - `http://localhost:4500/?phase=chat&surface=widget` → surface widget.
 - `http://localhost:4500/?phase=chat&fallback=1` → menu de secours.
+- `http://localhost:4500/?phase=otp` → vérification par email.
 
 L’archive est générée dans
-`release/chatbot-expert-ia-1.3.27.onirtech-template`.
+`release/chatbot-expert-ia-1.5.1.onirtech-template`.
 
 ## Ce qui est câblé au SDK
 
 - **Actions** : `submitIdentity`, `sendMessage(content, attachmentIds)`,
   `attachFile`, `removeAttachment`, `finish`, `selectFallback`,
   `openCollectionForm`, `openMedia`, `resize`, `openWidget`, `closeWidget`,
-  `request`.
+  `request`, `requestOtp`, `verifyOtp`.
 - **Capacités déclarées** : `messages`, `media`, `theme`, `modelForm`,
   `attachments`, `userState`, `knowledge`, `fallback`, `data`.
-- **Contexte utilisé** : `state.phase/status/messages/typing/pendingAttachments/
-  fallback`, `resources.media/modelForm`, `consent`, `theme`, `surface`, `params`.
+- **Contexte utilisé** : `state.phase` (`identity`/`otp`/`chat`),
+  `state.status/messages/typing/pendingAttachments/fallback`, `message.blocks`
+  (ADR-0067), `message.authorName`, `resources.media/modelForm`, `consent`,
+  `theme`, `surface`, `params`.
 - **Aucun réseau dans le template** : aucun `fetch` ; liens WhatsApp/téléphone/
   rendez-vous conservés tels quels et ouverts via `actions.openMedia()` quand
   c’est disponible.

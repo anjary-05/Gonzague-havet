@@ -14,8 +14,8 @@ const base = defineManifest({
   id: "chatbot-expert-ia",
   name: "Expert IA — Gonzague Havet",
   description:
-    "Chatbot shadcn : page et widget, identité, discussion, médias et pièces jointes.",
-  version: "1.3.27",
+    "Chatbot shadcn : page et widget, identité, discussion, contenu généré, médias et pièces jointes.",
+  version: "1.5.1",
   publisher: { id: "onirtech", name: "ONIRTECH", trustLevel: "official" },
   ui: {
     mode: "web-component",
@@ -352,6 +352,27 @@ const base = defineManifest({
       key: "afficher_fin",
       label: "Afficher le bouton terminer",
       description: "Bouton discret d'appel à actions.finish()",
+      type: "boolean",
+      default: true,
+    },
+    {
+      key: "afficher_markdown",
+      label: "Interpréter le Markdown",
+      description: "Rend les titres, listes, tableaux, liens et blocs de code des messages",
+      type: "boolean",
+      default: true,
+    },
+    {
+      key: "afficher_multimodal",
+      label: "Afficher le contenu multimodal",
+      description: "Affiche les images, audios, vidéos et fichiers portés par les messages",
+      type: "boolean",
+      default: true,
+    },
+    {
+      key: "afficher_contenu_genere",
+      label: "Afficher le contenu généré",
+      description: "Rend les blocs structurés ADR-0067 (résultats d'outils, champs typés)",
       type: "boolean",
       default: true,
     },
@@ -725,6 +746,7 @@ const editor = {
     { id: "frappe", label: "Indicateur de frappe", visibilityParam: "afficher_frappe" },
     { id: "galerie", label: "Galerie", visibilityParam: "afficher_galerie" },
     { id: "sources", label: "Sources", visibilityParam: "afficher_sources" },
+    { id: "contenu_genere", label: "Contenu généré", visibilityParam: "afficher_contenu_genere" },
     { id: "fin", label: "Fin de discussion", visibilityParam: "afficher_fin" },
     { id: "lanceur", label: "Lanceur" },
     { id: "mode", label: "Mode actif", visibilityParam: "afficher_indicateur_mode" },
@@ -755,6 +777,9 @@ const editor = {
     { param: "afficher_frappe", regions: ["frappe"], category: "appearance" },
     { param: "afficher_sources", regions: ["sources"], category: "appearance" },
     { param: "afficher_fin", regions: ["fin"], category: "appearance" },
+    { param: "afficher_markdown", regions: ["thread"], category: "appearance" },
+    { param: "afficher_multimodal", regions: ["thread"], category: "appearance" },
+    { param: "afficher_contenu_genere", regions: ["contenu_genere"], category: "appearance" },
     { param: "afficher_icones", regions: ["header", "contact_nav", "thread", "composer", "fin"], category: "appearance" },
     { param: "style_icones", regions: ["header", "contact_nav", "thread", "composer", "fin"], category: "appearance" },
     // Couleurs par élément : chaque zone inspectée ne montre que ses propres champs.
@@ -812,7 +837,7 @@ const editor = {
 
 export default {
   ...base,
-  identificationModes: ["contact", "anonymous"],
+  identificationModes: ["contact", "anonymous", "otp"],
   editor,
   params: [...base.params, avatarImage, sujetsSuggeres, modesActifs, libellesInterface, apparence],
 };

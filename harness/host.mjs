@@ -69,6 +69,7 @@ const MIME = {
 
 function hostPage(manifest, opts = {}) {
   const startChat = opts.phase === "chat";
+  const phase = opts.phase === "otp" ? "otp" : startChat ? "chat" : "identity";
   const consent = opts.consent === false
     ? null
     : { texte: "J'accepte la politique de confidentialité", lien: "https://example.com/confidentialite" };
@@ -98,14 +99,46 @@ function hostPage(manifest, opts = {}) {
     capabilities: manifest.capabilities,
     params: buildParams(manifest, opts.params),
     state: {
-      phase: startChat ? "chat" : "identity",
+      phase,
       status: "en_cours",
       messages: startChat
         ? [{
             id: "m0",
             role: "assistant",
-            content: "Bonjour ! (phase « chat » au chargement — sas sauté)",
+            content: [
+              "### Bonjour ! (mock)",
+              "",
+              "La phase **chat** est active (sas sauté).",
+              "",
+              "- Markdown interprété",
+              "- Images et pièces jointes prises en charge",
+            ].join("\\n"),
             medias: [],
+            at: new Date().toISOString(),
+          }, {
+            // Contrat ADR-0067 : blocs ordonnés + champs typés (génératif).
+            id: "m-blocks",
+            role: "assistant",
+            authorName: "Recherche (mock)",
+            content: "Ce texte de secours ne doit pas remplacer les blocs.",
+            medias: [],
+            blocks: [
+              { type: "text", text: "### Contenu généré (mock)" },
+              {
+                type: "tool_search_result",
+                contractVersion: 1,
+                tool: "fiche_mock",
+                layout: "card",
+                items: [{
+                  fields: [
+                    { key: "ville", label: "Ville", type: "select", value: "Paris" },
+                    { key: "tags", label: "Tags", type: "multi", value: ["IA", "PME"] },
+                    { key: "site", label: "Site", type: "url", value: "https://example.com/doc" },
+                  ],
+                }],
+                meta: { total: 1 },
+              },
+            ],
             at: new Date().toISOString(),
           }]
         : [],
@@ -179,6 +212,16 @@ function hostPage(manifest, opts = {}) {
   const clone = (v) => JSON.parse(JSON.stringify(v));
   const listeners = new Map();
   const emit = (e, p) => (listeners.get(e) || new Set()).forEach((cb) => cb(p));
+  // Neutralise les caractères Markdown d'un texte utilisateur (mock uniquement).
+  const escapeMarkdown = (value) => {
+    const forbidden = "*_#>[()" + String.fromCharCode(96);
+    return String(value ?? "")
+      .split("")
+      .map((char) => (forbidden.includes(char) ? " " : char))
+      .join("")
+      .replace(/  +/g, " ")
+      .trim();
+  };
 
   const actions = {
     submitIdentity: (data) => {
@@ -186,6 +229,25 @@ function hostPage(manifest, opts = {}) {
       ctx.state.messages = [
         { id: "m1", role: "assistant", content: "Bonjour " + data.nom + " ! Parlez-moi de votre projet.", medias: [], at: new Date().toISOString() },
       ];
+      render();
+    },
+    requestOtp: async (data) => {
+      ctx.state.otpEmail = data.email;
+      return {
+        challengeId: "mock-otp",
+        expiresAt: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
+        transport: "platform",
+      };
+    },
+    verifyOtp: async () => {
+      ctx.state.phase = "chat";
+      ctx.state.messages = [{
+        id: "otp-ok",
+        role: "assistant",
+        content: "Email vérifié (mock). Parlez-moi de votre projet.",
+        medias: [],
+        at: new Date().toISOString(),
+      }];
       render();
     },
     sendMessage: (content, attachmentIds = []) => {
@@ -208,7 +270,20 @@ function hostPage(manifest, opts = {}) {
         ctx.state.messages.push({
           id: "a" + Date.now(),
           role: "assistant",
-          content: "(mock) Merci, noté : « " + content + " ».",
+          content: [
+            "### Réponse (mock)",
+            "",
+            "(mock) Merci, noté : **" + escapeMarkdown(content) + "**.",
+            "",
+            "- Markdown **interprété**",
+            "- Image jointe ci-dessous",
+            "",
+            "~~~js",
+            "const multimodal = true;",
+            "~~~",
+            "",
+            "[Documentation](https://example.com/doc)",
+          ].join("\\n"),
           medias: ctx.resources.media.photos.slice(0, 1),
           knowledge: manifest.capabilities.includes("knowledge")
             ? [{ ref: "k1", titre: "Expertise IA (mock)" }]

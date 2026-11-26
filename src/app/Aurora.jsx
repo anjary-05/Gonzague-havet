@@ -110,6 +110,9 @@ export function Aurora({ surfaceOverride } = {}) {
   const voirFrappe = visible("afficher_frappe");
   const voirSources = visible("afficher_sources");
   const voirFin = visible("afficher_fin");
+  const voirMarkdown = p("afficher_markdown") !== false;
+  const voirMultimodal = p("afficher_multimodal") !== false;
+  const voirContenuGenere = p("afficher_contenu_genere") !== false;
   const voirIcones = p("afficher_icones") !== false;
   const styleIcones = p("style_icones") === "pleins" ? "pleins" : "traits";
 
@@ -182,6 +185,11 @@ export function Aurora({ surfaceOverride } = {}) {
 
   const [draft, setDraft] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  // Vérification par email (phase `otp` du contrat hôte). Les challenges ne
+  // sont jamais stockés dans le contexte : ils restent locaux au template.
+  const [otpChallenge, setOtpChallenge] = useState(null);
+  const [otpEmail, setOtpEmail] = useState("");
+  const [otpError, setOtpError] = useState("");
   const [confirmed, setConfirmed] = useState(() => new Set());
   const [dataResult, setDataResult] = useState(null);
   const threadRef = useRef(null);
@@ -264,7 +272,12 @@ export function Aurora({ surfaceOverride } = {}) {
     url: asText(params[definition.urlParam], definition.id === "rdv" ? urlRdv : urlWhatsapp),
   }));
 
-  useEffect(() => { if (phase === "chat") setSubmitting(false); }, [phase]);
+  useEffect(() => {
+    if (phase !== "chat") return;
+    setSubmitting(false);
+    setOtpChallenge(null);
+    setOtpError("");
+  }, [phase]);
   useEffect(() => {
     const node = threadRef.current;
     if (node) node.scrollTop = node.scrollHeight;
@@ -304,6 +317,57 @@ export function Aurora({ surfaceOverride } = {}) {
     // Demande explicite de hauteur à l'hôte (l'iframe passe de 64px à 640px).
     if (typeof actions?.resize === "function") actions.resize(hauteur);
     setOpen(true);
+  }
+
+  async function requestOtp(data) {
+    if (typeof actions?.requestOtp !== "function") {
+      setOtpError("Vérification par email indisponible");
+      return;
+    }
+    setSubmitting(true);
+    setOtpError("");
+    try {
+      const challenge = await actions.requestOtp(data);
+      if (!challenge || typeof challenge.challengeId !== "string" || challenge.challengeId === "") {
+        throw new Error("Réponse OTP invalide");
+      }
+      setOtpEmail(String(data.email ?? ""));
+      setOtpChallenge(challenge);
+    } catch (error) {
+      setOtpError(error instanceof Error && error.message ? error.message : "Impossible d'envoyer le code");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function verifyOtp(data) {
+    if (!otpChallenge || typeof actions?.verifyOtp !== "function") {
+      setOtpError("Vérification par email indisponible");
+      return;
+    }
+    const code = String(data.code ?? "").trim();
+    if (!/^\d{6}$/.test(code)) {
+      setOtpError("Saisissez les 6 chiffres du code.");
+      return;
+    }
+    setSubmitting(true);
+    setOtpError("");
+    try {
+      await actions.verifyOtp({ challengeId: otpChallenge.challengeId, code });
+    } catch (error) {
+      setOtpError(error instanceof Error && error.message ? error.message : "Code invalide ou expiré");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  function resendOtp() {
+    void requestOtp({ email: otpEmail, consentement: consent !== null });
+  }
+
+  function backToOtpEmail() {
+    setOtpChallenge(null);
+    setOtpError("");
   }
 
   function submitIdentity(event) {
@@ -365,6 +429,13 @@ export function Aurora({ surfaceOverride } = {}) {
     openDiscussion,
     submitIdentity,
     submitMessage,
+    otpChallenge,
+    otpEmail,
+    otpError,
+    requestOtp,
+    verifyOtp,
+    resendOtp,
+    backToOtpEmail,
     threadRef,
     fileRef,
     audioRef,
@@ -399,6 +470,9 @@ export function Aurora({ surfaceOverride } = {}) {
     voirFrappe,
     voirCartes,
     voirFin,
+    voirMarkdown,
+    voirMultimodal,
+    voirContenuGenere,
     libelleTerminer,
     texteFinalise,
     placeholder,

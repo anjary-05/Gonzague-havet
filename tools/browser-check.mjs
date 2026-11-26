@@ -74,6 +74,81 @@ try {
   );
   console.log("✓ envoi → typing → réponse");
 
+  // Conversation multimodale : Markdown interprété + image de média.
+  const conversation = await page.evaluate((tag) => {
+    const root = document.querySelector(tag).shadowRoot;
+    return {
+      heading: root.querySelector(".md h3")?.textContent || "",
+      strong: root.querySelector(".md strong")?.textContent || "",
+      code: root.querySelector(".md pre code")?.textContent || "",
+      image: root.querySelector("img.m-img")?.getAttribute("alt") || "",
+      link: root.querySelector("a.md-link")?.getAttribute("href") || "",
+    };
+  }, PAGE_ELEMENT);
+  if (conversation.heading !== "Réponse (mock)") {
+    throw new Error(`titre Markdown non rendu : ${conversation.heading}`);
+  }
+  if (!conversation.strong.includes("Parlez-moi de votre parcours")) {
+    throw new Error(`gras Markdown non rendu : ${conversation.strong}`);
+  }
+  if (!conversation.code.includes("const multimodal = true;")) {
+    throw new Error("bloc de code Markdown non rendu");
+  }
+  if (!conversation.image) throw new Error("image multimodale non rendue");
+  if (conversation.link !== "https://example.com/doc") {
+    throw new Error(`lien Markdown non rendu : ${conversation.link}`);
+  }
+  console.log("✓ Markdown et contenu multimodal rendus");
+
+  // Blocs ordonnés ADR-0067 : signatures d'outils et champs typés.
+  const generated = await browser.newPage();
+  generated.on("pageerror", (error) => errors.push(`generated pageerror: ${error.message}`));
+  await generated.goto(`${BASE}/?phase=chat`, { waitUntil: "networkidle0" });
+  await waitFor(generated, ".gen-result");
+  const generative = await generated.evaluate((tag) => {
+    const root = document.querySelector(tag).shadowRoot;
+    return {
+      author: root.querySelector(".msg-author")?.textContent || "",
+      tool: root.querySelector(".gen-tool")?.textContent || "",
+      badges: [...root.querySelectorAll(".gen-badge")].map((node) => node.textContent),
+      link: root.querySelector("a.gen-link")?.getAttribute("href") || "",
+      fallbackVisible: root.textContent.includes("Ce texte de secours ne doit pas remplacer les blocs."),
+    };
+  }, PAGE_ELEMENT);
+  if (generative.author !== "Recherche (mock)" || generative.tool !== "fiche_mock") {
+    throw new Error(`blocs ADR-0067 non rendus : ${JSON.stringify(generative)}`);
+  }
+  if (generative.badges.join(",") !== "Paris,IA,PME") {
+    throw new Error(`champs typés non rendus : ${generative.badges.join(",")}`);
+  }
+  if (generative.link !== "https://example.com/doc" || generative.fallbackVisible) {
+    throw new Error("lien typé ou secours de bloc incorrect");
+  }
+  console.log("✓ blocs ADR-0067 et champs typés rendus");
+
+  // Identification par code (phase `otp` du contrat hôte).
+  const otpPage = await browser.newPage();
+  otpPage.on("pageerror", (error) => errors.push(`otp pageerror: ${error.message}`));
+  await otpPage.goto(`${BASE}/?phase=otp`, { waitUntil: "networkidle0" });
+  await waitFor(otpPage, ".otp form");
+  await otpPage.evaluate((tag) => {
+    const form = document.querySelector(tag).shadowRoot.querySelector(".otp form");
+    form.querySelector('input[name="email"]').value = "alice@example.fr";
+    form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+  }, PAGE_ELEMENT);
+  await otpPage.waitForFunction(
+    (tag) => document.querySelector(tag)?.shadowRoot?.textContent?.includes("Code envoyé"),
+    { timeout: 15000 },
+    PAGE_ELEMENT,
+  );
+  await otpPage.evaluate((tag) => {
+    const form = document.querySelector(tag).shadowRoot.querySelector(".otp form");
+    form.querySelector('input[name="code"]').value = "123456";
+    form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+  }, PAGE_ELEMENT);
+  await waitFor(otpPage, ".thread");
+  console.log("✓ phase otp : code demandé puis vérifié");
+
   await page.evaluate((tag) => {
     document.querySelector(tag).shadowRoot.querySelector(".finish").click();
   }, PAGE_ELEMENT);
